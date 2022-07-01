@@ -1,0 +1,4166 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>My first three.js app</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+        </style>
+		<style>
+			body { margin: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+                background-size: 400% 400%;
+                animation: gradient 15s ease infinite;
+                 }
+
+            @keyframes gradient {
+                0% {
+                    background-position: 0% 50%;
+                }
+                50% {
+                    background-position: 100% 50%;
+                }
+                100% {
+                    background-position: 0% 50%;
+                }
+            }
+
+            .text {
+                position: absolute;
+                text-align: center;
+                z-index: 100;
+                display: block;
+                color: white;
+                font-family: 'Montserrat', sans-serif;
+                font-size: 24px;
+                max-width: 300px;
+            }
+
+            .datetext {
+                bottom: 60%;
+                left: 10%;
+            }
+
+            .nametext {
+                bottom: 60%;
+                right: 10%;
+            }
+
+            .video {
+                position: absolute;
+                z-index: -1;
+                transform: translate(-50%, 0);
+                left: 50%;
+                top: 2%;
+            }
+
+		</style>
+	</head>
+	<body>
+        <!-- Add Tiny Desk data -->
+        <script>
+            window.tinyDeskData = [
+  {
+    "artist": "Laura Gibson",
+    "thing_type_id": 1,
+    "public_publish_date": "4/22/2008",
+    "aggregations": "Music / 1039, In Performance / 1040, New Music / 1108, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=G1Az1xWhdl0",
+    "thumbnails": "https://img.youtube.com/vi/G1Az1xWhdl0/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 121022
+  },
+  {
+    "artist": "Vic Chesnutt",
+    "thing_type_id": 1,
+    "public_publish_date": "6/5/2008",
+    "aggregations": "Music / 1039, In Performance / 1040, New Music / 1108, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=a8vsSQEAGnA",
+    "thumbnails": "https://img.youtube.com/vi/a8vsSQEAGnA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 191468
+  },
+  {
+    "artist": "Sam Phillips",
+    "thing_type_id": 1,
+    "public_publish_date": "6/25/2008",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ANOrllutAhs",
+    "thumbnails": "https://img.youtube.com/vi/ANOrllutAhs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 150592
+  },
+  {
+    "artist": "Sera Cahoone",
+    "thing_type_id": 1,
+    "public_publish_date": "7/10/2008",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=UaAYjdHvw4I",
+    "thumbnails": "https://img.youtube.com/vi/UaAYjdHvw4I/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 133058
+  },
+  {
+    "artist": "Thao Nguyen",
+    "thing_type_id": 1,
+    "public_publish_date": "9/4/2008",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Concerts / 1109, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=QXXc25vtuxk",
+    "thumbnails": "https://img.youtube.com/vi/QXXc25vtuxk/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 548075
+  },
+  {
+    "artist": "Lambchop's Kurt Wagner",
+    "thing_type_id": 1,
+    "public_publish_date": "10/8/2008",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=IG_uM5th6Fo",
+    "thumbnails": "https://img.youtube.com/vi/IG_uM5th6Fo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 128607
+  },
+  {
+    "artist": "Dr. Dog",
+    "thing_type_id": 1,
+    "public_publish_date": "10/20/2008",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=jzmvzcDWZjI",
+    "thumbnails": "https://img.youtube.com/vi/jzmvzcDWZjI/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 545510
+  },
+  {
+    "artist": "Jim White",
+    "thing_type_id": 1,
+    "public_publish_date": "11/7/2008",
+    "aggregations": "Music / 1039, New Music / 1108, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=sPZc74_1IiM",
+    "thumbnails": "https://img.youtube.com/vi/sPZc74_1IiM/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 62790
+  },
+  {
+    "artist": "Shearwater",
+    "thing_type_id": 1,
+    "public_publish_date": "11/14/2008",
+    "aggregations": "Music / 1039, New Music / 1108, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=WZoezkHVXL4",
+    "thumbnails": "https://img.youtube.com/vi/WZoezkHVXL4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 80110
+  },
+  {
+    "artist": "Woven Hand",
+    "thing_type_id": 1,
+    "public_publish_date": "1/7/2009",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=zSfhXPA3V9A",
+    "thumbnails": "https://img.youtube.com/vi/zSfhXPA3V9A/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 148587
+  },
+  {
+    "artist": "Super XX Man",
+    "thing_type_id": 1,
+    "public_publish_date": "1/27/2009",
+    "aggregations": "Music / 1039, In Performance / 1040, New Music / 1108, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=NRE_qJfFMxA",
+    "thumbnails": "https://img.youtube.com/vi/NRE_qJfFMxA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 30701
+  },
+  {
+    "artist": "Tom Jones",
+    "thing_type_id": 1,
+    "public_publish_date": "3/2/2009",
+    "aggregations": "Jazz / 10002, Music / 1039, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=118zckalkJ0",
+    "thumbnails": "https://img.youtube.com/vi/118zckalkJ0/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 524594
+  },
+  {
+    "artist": "Horse Feathers",
+    "thing_type_id": 1,
+    "public_publish_date": "5/8/2009",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=QSDpSUB6YjA",
+    "thumbnails": "https://img.youtube.com/vi/QSDpSUB6YjA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 200306
+  },
+  {
+    "artist": "Maria Taylor",
+    "thing_type_id": 1,
+    "public_publish_date": "6/29/2009",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=5dqqknz0ERg",
+    "thumbnails": "https://img.youtube.com/vi/5dqqknz0ERg/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 45217
+  },
+  {
+    "artist": "Bill Callahan",
+    "thing_type_id": 1,
+    "public_publish_date": "7/13/2009",
+    "aggregations": "Tiny Desk / 92071316, Studio Sessions / 1103, Music Videos / 1110, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=MHVNUrcyJy8",
+    "thumbnails": "https://img.youtube.com/vi/MHVNUrcyJy8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 726656
+  },
+  {
+    "artist": "Dave Douglas Brass Ecstasy",
+    "thing_type_id": 1,
+    "public_publish_date": "7/20/2009",
+    "aggregations": "Tiny Desk / 92071316, Jazz / 10002, Music / 1039, Studio Sessions / 1103, Music Videos / 1110",
+    "YouTube": "https://www.youtube.com/watch?v=2_EW2O_1qAc",
+    "thumbnails": "https://img.youtube.com/vi/2_EW2O_1qAc/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 200440
+  },
+  {
+    "artist": "Sarah Siskind",
+    "thing_type_id": 1,
+    "public_publish_date": "7/27/2009",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, Music Videos / 1110, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=6X1uocXxyQo",
+    "thumbnails": "https://img.youtube.com/vi/6X1uocXxyQo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 33939
+  },
+  {
+    "artist": "Dark Meat",
+    "thing_type_id": 1,
+    "public_publish_date": "8/24/2009",
+    "aggregations": "Studio Sessions / 1103, Music / 1039, New Music / 1108, Tiny Desk / 92071316, Music Videos / 1110, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=MrW0w2Bq53U",
+    "thumbnails": "https://img.youtube.com/vi/MrW0w2Bq53U/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 37068
+  },
+  {
+    "artist": "The Tallest Man On Earth",
+    "thing_type_id": 1,
+    "public_publish_date": "9/14/2009",
+    "aggregations": "Tiny Desk / 92071316, Rock / 10001, Music / 1039, Music Videos / 1110",
+    "YouTube": "https://www.youtube.com/watch?v=JLRTleMY_mc",
+    "thumbnails": "https://img.youtube.com/vi/JLRTleMY_mc/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 3674930
+  },
+  {
+    "artist": "Telekinesis",
+    "thing_type_id": 1,
+    "public_publish_date": "9/21/2009",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Studio Sessions / 1103, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=ZRAHI8x3S28",
+    "thumbnails": "https://img.youtube.com/vi/ZRAHI8x3S28/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 19191
+  },
+  {
+    "artist": "Rodrigo y Gabriela",
+    "thing_type_id": 1,
+    "public_publish_date": "10/10/2009",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music / 1039, Concerts / 1109, Latin / 139996449",
+    "YouTube": "https://www.youtube.com/watch?v=wKd0HNg1kFQ",
+    "thumbnails": "https://img.youtube.com/vi/wKd0HNg1kFQ/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 2302294
+  },
+  {
+    "artist": "Ralph Stanley",
+    "thing_type_id": 1,
+    "public_publish_date": "10/19/2009",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, In Performance / 1040, Bluegrass/Americana / 139998438, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ca7JCI5Jjhk",
+    "thumbnails": "https://img.youtube.com/vi/ca7JCI5Jjhk/hq1.jpg",
+    "genre": "Bluegrass/Americana",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 52275
+  },
+  {
+    "artist": "Edward Sharpe And The Magnetic Zeros",
+    "thing_type_id": 1,
+    "public_publish_date": "10/26/2009",
+    "aggregations": "Tiny Desk / 92071316, Concerts / 1109, Rock / 10001, Music / 1039",
+    "YouTube": "https://www.youtube.com/watch?v=XWIvfE01J0k",
+    "thumbnails": "https://img.youtube.com/vi/XWIvfE01J0k/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 7115752
+  },
+  {
+    "artist": "K'naan",
+    "thing_type_id": 1,
+    "public_publish_date": "11/9/2009",
+    "aggregations": "Tiny Desk / 92071316, Hip-Hop / 10005, Music Videos / 1110, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=AE-YaL0Y3bo",
+    "thumbnails": "https://img.youtube.com/vi/AE-YaL0Y3bo/hq1.jpg",
+    "genre": "Hip-Hop",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 417874
+  },
+  {
+    "artist": "Lightning Dust",
+    "thing_type_id": 1,
+    "public_publish_date": "12/7/2009",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, In Performance / 1040, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=ErnSsJRKNJ0",
+    "thumbnails": "https://img.youtube.com/vi/ErnSsJRKNJ0/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 102729
+  },
+  {
+    "artist": "The Mountain Goats",
+    "thing_type_id": 1,
+    "public_publish_date": "1/3/2010",
+    "aggregations": "Tiny Desk / 92071316, Rock / 10001, Music / 1039, Music Videos / 1110, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=y5mhIHW-bL4",
+    "thumbnails": "https://img.youtube.com/vi/y5mhIHW-bL4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 154006
+  },
+  {
+    "artist": "The Low Anthem",
+    "thing_type_id": 1,
+    "public_publish_date": "1/20/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, In Performance / 1040, Rock / 10001, the low anthem / 581661510, tiny desk / 553997605, tiny desk concert / 177618926, Concerts / 1109, All Songs Featured 2 / 164710643",
+    "YouTube": "https://www.youtube.com/watch?v=UanRDr0m4IU",
+    "thumbnails": "https://img.youtube.com/vi/UanRDr0m4IU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 44618
+  },
+  {
+    "artist": "Edmar Castaneda",
+    "thing_type_id": 1,
+    "public_publish_date": "2/8/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Jazz / 10002, World / 10004",
+    "YouTube": "https://www.youtube.com/watch?v=0SNhAKyXtC8",
+    "thumbnails": "https://img.youtube.com/vi/0SNhAKyXtC8/hq1.jpg",
+    "genre": "Jazz, World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 424880
+  },
+  {
+    "artist": "Abaji",
+    "thing_type_id": 1,
+    "public_publish_date": "2/15/2010",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Music / 1039",
+    "YouTube": "https://www.youtube.com/watch?v=ICBtVbDVinw",
+    "thumbnails": "https://img.youtube.com/vi/ICBtVbDVinw/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 33684
+  },
+  {
+    "artist": "Omara Portuondo",
+    "thing_type_id": 1,
+    "public_publish_date": "3/8/2010",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Music / 1039, Concerts / 1109",
+    "YouTube": "https://www.youtube.com/watch?v=e3blQ3I3GRQ",
+    "thumbnails": "https://img.youtube.com/vi/e3blQ3I3GRQ/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 33354
+  },
+  {
+    "artist": "The Antlers",
+    "thing_type_id": 1,
+    "public_publish_date": "3/15/2010",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, In Performance / 1040, Rock / 10001, Music Videos / 1110, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=FNqYFLEt46Y",
+    "thumbnails": "https://img.youtube.com/vi/FNqYFLEt46Y/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 52329
+  },
+  {
+    "artist": "Jakob Dylan",
+    "thing_type_id": 1,
+    "public_publish_date": "4/2/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=NC0-L6C-kmo",
+    "thumbnails": "https://img.youtube.com/vi/NC0-L6C-kmo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 560076
+  },
+  {
+    "artist": "Regina Carter",
+    "thing_type_id": 1,
+    "public_publish_date": "4/11/2010",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Music / 1039, Jazz / 10002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=fAVEuYk5qiw",
+    "thumbnails": "https://img.youtube.com/vi/fAVEuYk5qiw/hq1.jpg",
+    "genre": "World, Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 130843
+  },
+  {
+    "artist": "David Russell",
+    "thing_type_id": 1,
+    "public_publish_date": "4/19/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Classical / 10003",
+    "YouTube": "https://www.youtube.com/watch?v=ANcC5sCCVEc",
+    "thumbnails": "https://img.youtube.com/vi/ANcC5sCCVEc/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 496435
+  },
+  {
+    "artist": "Lionel Loueke",
+    "thing_type_id": 1,
+    "public_publish_date": "4/26/2010",
+    "aggregations": "Tiny Desk / 92071316, Jazz / 10002, Music Videos / 1110, Music / 1039, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=7Wd5s78Lghw",
+    "thumbnails": "https://img.youtube.com/vi/7Wd5s78Lghw/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 53020
+  },
+  {
+    "artist": "Fredrik",
+    "thing_type_id": 1,
+    "public_publish_date": "5/3/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ycyazyUe9lA",
+    "thumbnails": "https://img.youtube.com/vi/ycyazyUe9lA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 24199
+  },
+  {
+    "artist": "Moby And Kelli Scarr",
+    "thing_type_id": 1,
+    "public_publish_date": "5/4/2010",
+    "aggregations": "Tiny Desk / 92071316, Music / 1039, Rock / 10001, Music Videos / 1110",
+    "YouTube": "https://www.youtube.com/watch?v=C7Gtp8YhmoI",
+    "thumbnails": "https://img.youtube.com/vi/C7Gtp8YhmoI/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 61410
+  },
+  {
+    "artist": "Zuill Bailey",
+    "thing_type_id": 1,
+    "public_publish_date": "6/4/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Classical / 10003",
+    "YouTube": "https://www.youtube.com/watch?v=5EkdIaEDOt0",
+    "thumbnails": "https://img.youtube.com/vi/5EkdIaEDOt0/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 63015
+  },
+  {
+    "artist": "Gogol Bordello",
+    "thing_type_id": 1,
+    "public_publish_date": "6/28/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001",
+    "YouTube": "https://youtu.be/IJGh50t6crw",
+    "thumbnails": "https://img.youtube.com/vi/IJGh50t6crw/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 359208
+  },
+  {
+    "artist": "Jimmy Cliff",
+    "thing_type_id": 1,
+    "public_publish_date": "7/12/2010",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Music / 1039, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/QYtIT6J7G10",
+    "thumbnails": "https://img.youtube.com/vi/QYtIT6J7G10/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 80247
+  },
+  {
+    "artist": "Bela Fleck, Edgar Meyer, Zakir Hussain",
+    "thing_type_id": 1,
+    "public_publish_date": "7/26/2010",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Music / 1039",
+    "YouTube": "https://youtu.be/X7Z0QEVfR8c",
+    "thumbnails": "https://img.youtube.com/vi/X7Z0QEVfR8c/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 115641
+  },
+  {
+    "artist": "The Holmes Brothers",
+    "thing_type_id": 1,
+    "public_publish_date": "8/2/2010",
+    "aggregations": "Tiny Desk / 92071316, Jazz / 10002, Music Videos / 1110, Music / 1039",
+    "YouTube": "https://www.youtube.com/watch?v=9knSWR3chAI",
+    "thumbnails": "https://img.youtube.com/vi/9knSWR3chAI/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 75076
+  },
+  {
+    "artist": "Mavis Staples",
+    "thing_type_id": 1,
+    "public_publish_date": "8/9/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, R&amp;B/Soul / 139998808",
+    "YouTube": "https://youtu.be/OuCF7BtGrEI",
+    "thumbnails": "https://img.youtube.com/vi/OuCF7BtGrEI/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 72127
+  },
+  {
+    "artist": "Peter Wolf Crier",
+    "thing_type_id": 1,
+    "public_publish_date": "8/17/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=gTyY3BCp3pk",
+    "thumbnails": "https://img.youtube.com/vi/gTyY3BCp3pk/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 32400
+  },
+  {
+    "artist": "Ana Tijoux",
+    "thing_type_id": 1,
+    "public_publish_date": "8/30/2010",
+    "aggregations": "Tiny Desk / 92071316, Hip-Hop / 10005, World / 10004, Music Videos / 1110, Music / 1039, Latin / 139996449",
+    "YouTube": "https://www.youtube.com/watch?v=jsCO_M0Nnwk",
+    "thumbnails": "https://img.youtube.com/vi/jsCO_M0Nnwk/hq1.jpg",
+    "genre": "Hip-Hop, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 122953
+  },
+  {
+    "artist": "The Nels Cline Singers",
+    "thing_type_id": 1,
+    "public_publish_date": "9/7/2010",
+    "aggregations": "Tiny Desk / 92071316, Jazz / 10002, Music Videos / 1110, Music / 1039",
+    "YouTube": "https://www.youtube.com/watch?v=BOb3Crrlfh0",
+    "thumbnails": "https://img.youtube.com/vi/BOb3Crrlfh0/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 97090
+  },
+  {
+    "artist": "Seu Jorge",
+    "thing_type_id": 1,
+    "public_publish_date": "9/13/2010",
+    "aggregations": "Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Music / 1039, Latin / 139996449",
+    "YouTube": "https://youtu.be/2Ws_5-hiqao",
+    "thumbnails": "https://img.youtube.com/vi/2Ws_5-hiqao/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 2418898
+  },
+  {
+    "artist": "Alisa Weilerstein",
+    "thing_type_id": 1,
+    "public_publish_date": "9/15/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Classical / 10003",
+    "YouTube": "https://www.youtube.com/watch?v=kuiQ5tt0iI8",
+    "thumbnails": "https://img.youtube.com/vi/kuiQ5tt0iI8/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 62446
+  },
+  {
+    "artist": "Eef Barzelay Of Clem Snide",
+    "thing_type_id": 1,
+    "public_publish_date": "9/20/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=YX6vj6ni9ic",
+    "thumbnails": "https://img.youtube.com/vi/YX6vj6ni9ic/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 101897
+  },
+  {
+    "artist": "Lost In The Trees",
+    "thing_type_id": 1,
+    "public_publish_date": "9/23/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=QkEjJpuZbog",
+    "thumbnails": "https://img.youtube.com/vi/QkEjJpuZbog/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 81037
+  },
+  {
+    "artist": "Tom Tom Club",
+    "thing_type_id": 1,
+    "public_publish_date": "10/6/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=mKJG57qnYdc",
+    "thumbnails": "https://img.youtube.com/vi/mKJG57qnYdc/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 241776
+  },
+  {
+    "artist": "Lower Dens",
+    "thing_type_id": 1,
+    "public_publish_date": "10/10/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Concerts / 1109, Music / 1039, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=M0UWi5W_B4E",
+    "thumbnails": "https://img.youtube.com/vi/M0UWi5W_B4E/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 111056
+  },
+  {
+    "artist": "Hey Marseilles",
+    "thing_type_id": 1,
+    "public_publish_date": "10/17/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=zvYuiJVkc5g",
+    "thumbnails": "https://img.youtube.com/vi/zvYuiJVkc5g/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 74771
+  },
+  {
+    "artist": "Stile Antico",
+    "thing_type_id": 1,
+    "public_publish_date": "10/25/2010",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Concerts / 1109, Music / 1039, Classical / 10003",
+    "YouTube": "https://www.youtube.com/watch?v=Kmhba4QoH3s",
+    "thumbnails": "https://img.youtube.com/vi/Kmhba4QoH3s/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 59005
+  },
+  {
+    "artist": "Nick Lowe",
+    "thing_type_id": 1,
+    "public_publish_date": "11/1/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://youtu.be/Ebs6uj2iMEo",
+    "thumbnails": "https://img.youtube.com/vi/Ebs6uj2iMEo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 57583
+  },
+  {
+    "artist": "Rana Santacruz",
+    "thing_type_id": 1,
+    "public_publish_date": "11/2/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, Latin / 139996449",
+    "YouTube": "https://www.youtube.com/watch?v=zq1T0P7zotA",
+    "thumbnails": "https://img.youtube.com/vi/zq1T0P7zotA/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 46170
+  },
+  {
+    "artist": "Black Dub",
+    "thing_type_id": 1,
+    "public_publish_date": "11/8/2010",
+    "aggregations": "Music Videos / 1110, Concerts / 1109, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=86N4lNuVz_8",
+    "thumbnails": "https://img.youtube.com/vi/86N4lNuVz_8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 312328
+  },
+  {
+    "artist": "Los Lobos",
+    "thing_type_id": 1,
+    "public_publish_date": "11/10/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Latin / 139996449, Rock / 10001",
+    "YouTube": "https://youtu.be/VyO6-oZmtms",
+    "thumbnails": "https://img.youtube.com/vi/VyO6-oZmtms/hq1.jpg",
+    "genre": "Latin, Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 94739
+  },
+  {
+    "artist": "Sharon Van Etten",
+    "thing_type_id": 1,
+    "public_publish_date": "11/14/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=ECVEVDES3Js",
+    "thumbnails": "https://img.youtube.com/vi/ECVEVDES3Js/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 579179
+  },
+  {
+    "artist": "The Ghost Of A Saber Tooth Tiger",
+    "thing_type_id": 1,
+    "public_publish_date": "11/17/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://youtu.be/DXDwkzM7eMw",
+    "thumbnails": "https://img.youtube.com/vi/DXDwkzM7eMw/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 182572
+  },
+  {
+    "artist": "Olof Arnalds",
+    "thing_type_id": 1,
+    "public_publish_date": "11/22/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=41wtK-V46VY",
+    "thumbnails": "https://img.youtube.com/vi/41wtK-V46VY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 41546
+  },
+  {
+    "artist": "Khaira Arby",
+    "thing_type_id": 1,
+    "public_publish_date": "11/29/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=cdpNQ90gGXQ",
+    "thumbnails": "https://img.youtube.com/vi/cdpNQ90gGXQ/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 84340
+  },
+  {
+    "artist": "Buke And Gass",
+    "thing_type_id": 1,
+    "public_publish_date": "12/6/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=-wQv60dxAUU",
+    "thumbnails": "https://img.youtube.com/vi/-wQv60dxAUU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 201400
+  },
+  {
+    "artist": "Yolanda Kondonassis",
+    "thing_type_id": 1,
+    "public_publish_date": "12/8/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Classical / 10003",
+    "YouTube": "https://www.youtube.com/watch?v=CHym8Xt41E8",
+    "thumbnails": "https://img.youtube.com/vi/CHym8Xt41E8/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 37054
+  },
+  {
+    "artist": "The Red River",
+    "thing_type_id": 1,
+    "public_publish_date": "12/13/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=qKiZB_ltXM0",
+    "thumbnails": "https://img.youtube.com/vi/qKiZB_ltXM0/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 12074
+  },
+  {
+    "artist": "The Heligoats",
+    "thing_type_id": 1,
+    "public_publish_date": "12/15/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=gtnY_HxqCJQ",
+    "thumbnails": "https://img.youtube.com/vi/gtnY_HxqCJQ/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 157295
+  },
+  {
+    "artist": "Matt Wilson's Christmas Tree-O",
+    "thing_type_id": 1,
+    "public_publish_date": "12/20/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Jazz / 10002",
+    "YouTube": "https://www.youtube.com/watch?v=Q7tz0MPz2QE",
+    "thumbnails": "https://img.youtube.com/vi/Q7tz0MPz2QE/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 28236
+  },
+  {
+    "artist": "Luisa Maita",
+    "thing_type_id": 1,
+    "public_publish_date": "12/26/2010",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, Latin / 139996449",
+    "YouTube": "https://www.youtube.com/watch?v=wqFlSNLF3YE",
+    "thumbnails": "https://img.youtube.com/vi/wqFlSNLF3YE/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 53599
+  },
+  {
+    "artist": "Abigail Washburn",
+    "thing_type_id": 1,
+    "public_publish_date": "1/3/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Bluegrass/Americana / 139998438",
+    "YouTube": "https://www.youtube.com/watch?v=oj_WIqZc9KA",
+    "thumbnails": "https://img.youtube.com/vi/oj_WIqZc9KA/hq1.jpg",
+    "genre": "Rock, Bluegrass/Americana",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 116961
+  },
+  {
+    "artist": "Gyptian",
+    "thing_type_id": 1,
+    "public_publish_date": "1/5/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004",
+    "YouTube": "https://www.youtube.com/watch?v=fz7NoHyviUU",
+    "thumbnails": "https://img.youtube.com/vi/fz7NoHyviUU/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 501182
+  },
+  {
+    "artist": "Ballake Sissoko And Vincent Segal",
+    "thing_type_id": 1,
+    "public_publish_date": "1/17/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=QtiTfejYpgs",
+    "thumbnails": "https://img.youtube.com/vi/QtiTfejYpgs/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 557057
+  },
+  {
+    "artist": "Iron And Wine",
+    "thing_type_id": 1,
+    "public_publish_date": "1/21/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=6nT911jkWEo",
+    "thumbnails": "https://img.youtube.com/vi/6nT911jkWEo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 3389052
+  },
+  {
+    "artist": "Basia Bulat",
+    "thing_type_id": 1,
+    "public_publish_date": "1/24/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/wh-FnjWFTJQ",
+    "thumbnails": "https://img.youtube.com/vi/wh-FnjWFTJQ/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 52605
+  },
+  {
+    "artist": "Richard Thompson",
+    "thing_type_id": 1,
+    "public_publish_date": "2/1/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=1tcNmAuVU5A",
+    "thumbnails": "https://img.youtube.com/vi/1tcNmAuVU5A/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 206484
+  },
+  {
+    "artist": "Stars",
+    "thing_type_id": 1,
+    "public_publish_date": "2/3/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Dz3ajUhTwXQ",
+    "thumbnails": "https://img.youtube.com/vi/Dz3ajUhTwXQ/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 88960
+  },
+  {
+    "artist": "Ivan And Alyosha",
+    "thing_type_id": 1,
+    "public_publish_date": "2/7/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=CJvKxdcoHBE",
+    "thumbnails": "https://img.youtube.com/vi/CJvKxdcoHBE/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 138760
+  },
+  {
+    "artist": "Esperanza Spalding",
+    "thing_type_id": 1,
+    "public_publish_date": "2/12/2011",
+    "aggregations": "Tiny Desk / 92071316, Jazz / 10002, Music Videos / 1110, Music / 1039, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=sBZa7-2bG2I",
+    "thumbnails": "https://img.youtube.com/vi/sBZa7-2bG2I/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 1813759
+  },
+  {
+    "artist": "Turtle Island Quartet",
+    "thing_type_id": 1,
+    "public_publish_date": "2/16/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=NacFvfTlX1c",
+    "thumbnails": "https://img.youtube.com/vi/NacFvfTlX1c/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 86681
+  },
+  {
+    "artist": "Adele",
+    "thing_type_id": 1,
+    "public_publish_date": "2/17/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Concerts / 1109, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=XfzpYcwiUrA",
+    "thumbnails": "https://img.youtube.com/vi/XfzpYcwiUrA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 29253340
+  },
+  {
+    "artist": "Local Natives",
+    "thing_type_id": 1,
+    "public_publish_date": "2/21/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=FoyjUYtk30s",
+    "thumbnails": "https://img.youtube.com/vi/FoyjUYtk30s/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 1228522
+  },
+  {
+    "artist": "Damien Jurado",
+    "thing_type_id": 1,
+    "public_publish_date": "2/28/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=jLiZ0jCzpdA",
+    "thumbnails": "https://img.youtube.com/vi/jLiZ0jCzpdA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 470147
+  },
+  {
+    "artist": "Steve Riley And The Mamou Playboys",
+    "thing_type_id": 1,
+    "public_publish_date": "3/7/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=6PNFkWfZDR8",
+    "thumbnails": "https://img.youtube.com/vi/6PNFkWfZDR8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 97999
+  },
+  {
+    "artist": "Lizz Wright",
+    "thing_type_id": 1,
+    "public_publish_date": "3/14/2011",
+    "aggregations": "Concerts / 1109, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=_I9Mh317tYc",
+    "thumbnails": "https://img.youtube.com/vi/_I9Mh317tYc/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 113364
+  },
+  {
+    "artist": "Nellie McKay",
+    "thing_type_id": 1,
+    "public_publish_date": "4/4/2011",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Music Videos / 1110, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=cCIG6Jldl24",
+    "thumbnails": "https://img.youtube.com/vi/cCIG6Jldl24/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 134696
+  },
+  {
+    "artist": "Sierra Leone's Refugee All Stars",
+    "thing_type_id": 1,
+    "public_publish_date": "4/6/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=uZJscRYBmIg",
+    "thumbnails": "https://img.youtube.com/vi/uZJscRYBmIg/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 122219
+  },
+  {
+    "artist": "Josh Ritter",
+    "thing_type_id": 1,
+    "public_publish_date": "4/11/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=4Quq7OdPQsU",
+    "thumbnails": "https://img.youtube.com/vi/4Quq7OdPQsU/hq1.jpg",
+    "genre": "Rock, Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 480634
+  },
+  {
+    "artist": "Otis Taylor",
+    "thing_type_id": 1,
+    "public_publish_date": "4/13/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Jazz / 10002, Blues / 139998151, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=am4GcbBrdMA",
+    "thumbnails": "https://img.youtube.com/vi/am4GcbBrdMA/hq1.jpg",
+    "genre": "Jazz, Blues",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 196618
+  },
+  {
+    "artist": "Mount Kimbie",
+    "thing_type_id": 1,
+    "public_publish_date": "4/18/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Electronic/Dance / 135408474, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=n1htNKK_6hQ",
+    "thumbnails": "https://img.youtube.com/vi/n1htNKK_6hQ/hq1.jpg",
+    "genre": "Electronic/Dance",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 273563
+  },
+  {
+    "artist": "Pokey LaFarge",
+    "thing_type_id": 1,
+    "public_publish_date": "4/20/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=seKAfbWFWCM",
+    "thumbnails": "https://img.youtube.com/vi/seKAfbWFWCM/hq1.jpg",
+    "genre": "Rock, Folk",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 1241690
+  },
+  {
+    "artist": "Steve Earle",
+    "thing_type_id": 1,
+    "public_publish_date": "4/25/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=onxGMaIDxi0",
+    "thumbnails": "https://img.youtube.com/vi/onxGMaIDxi0/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 825173
+  },
+  {
+    "artist": "Wu Man",
+    "thing_type_id": 1,
+    "public_publish_date": "4/27/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Rg_iZhUlyRE",
+    "thumbnails": "https://img.youtube.com/vi/Rg_iZhUlyRE/hq1.jpg",
+    "genre": "World, Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 341482
+  },
+  {
+    "artist": "Booker T. Jones",
+    "thing_type_id": 1,
+    "public_publish_date": "5/2/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Jazz / 10002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=rh9KDzNkpSI",
+    "thumbnails": "https://img.youtube.com/vi/rh9KDzNkpSI/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 2757137
+  },
+  {
+    "artist": "Julieta Venegas",
+    "thing_type_id": 1,
+    "public_publish_date": "5/9/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Latin / 139996449, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=-lLnpEv_9dw",
+    "thumbnails": "https://img.youtube.com/vi/-lLnpEv_9dw/hq1.jpg",
+    "genre": "Latin, Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 663682
+  },
+  {
+    "artist": "Neil Innes",
+    "thing_type_id": 1,
+    "public_publish_date": "5/11/2011",
+    "aggregations": "Music Videos / 1110, Tiny Desk / 92071316, Music / 1039, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=woqgI7loyo4",
+    "thumbnails": "https://img.youtube.com/vi/woqgI7loyo4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 58920
+  },
+  {
+    "artist": "Future Islands",
+    "thing_type_id": 1,
+    "public_publish_date": "5/16/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/7IgdpEjO_X8",
+    "thumbnails": "https://img.youtube.com/vi/7IgdpEjO_X8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 144359
+  },
+  {
+    "artist": "Low",
+    "thing_type_id": 1,
+    "public_publish_date": "5/22/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/5m06nMHTQ7U",
+    "thumbnails": "https://img.youtube.com/vi/5m06nMHTQ7U/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 42615
+  },
+  {
+    "artist": "The Kopecky Family Band",
+    "thing_type_id": 1,
+    "public_publish_date": "6/6/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=SZTUQwI9rLI",
+    "thumbnails": "https://img.youtube.com/vi/SZTUQwI9rLI/hq1.jpg",
+    "genre": "Rock, Folk",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 128154
+  },
+  {
+    "artist": "The Black Angels",
+    "thing_type_id": 1,
+    "public_publish_date": "6/8/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=T-h4_t_wE4Y",
+    "thumbnails": "https://img.youtube.com/vi/T-h4_t_wE4Y/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 167283
+  },
+  {
+    "artist": "Chris Thile And Michael Daves",
+    "thing_type_id": 1,
+    "public_publish_date": "6/13/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Bluegrass/Americana / 139998438, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=F_CKeb2gPQ8",
+    "thumbnails": "https://img.youtube.com/vi/F_CKeb2gPQ8/hq1.jpg",
+    "genre": "Rock, Bluegrass/Americana",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 1139517
+  },
+  {
+    "artist": "Charlie Siem",
+    "thing_type_id": 1,
+    "public_publish_date": "6/15/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, NPR Classical Live / 144933426, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=stvyyjwQH3w",
+    "thumbnails": "https://img.youtube.com/vi/stvyyjwQH3w/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 117901
+  },
+  {
+    "artist": "The Decemberists",
+    "thing_type_id": 1,
+    "public_publish_date": "6/20/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=VHdsoNewFdU",
+    "thumbnails": "https://img.youtube.com/vi/VHdsoNewFdU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 1672534
+  },
+  {
+    "artist": "YACHT",
+    "thing_type_id": 1,
+    "public_publish_date": "6/22/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=EwRHWqlRFy4",
+    "thumbnails": "https://img.youtube.com/vi/EwRHWqlRFy4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 247618
+  },
+  {
+    "artist": "The Civil Wars",
+    "thing_type_id": 1,
+    "public_publish_date": "6/27/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=HamYmjllE6A",
+    "thumbnails": "https://img.youtube.com/vi/HamYmjllE6A/hq1.jpg",
+    "genre": "Rock, Folk",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 1893719
+  },
+  {
+    "artist": "Milos",
+    "thing_type_id": 1,
+    "public_publish_date": "6/30/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=EQ603gAMQvE",
+    "thumbnails": "https://img.youtube.com/vi/EQ603gAMQvE/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 166731
+  },
+  {
+    "artist": "The Blind Boys Of Alabama",
+    "thing_type_id": 1,
+    "public_publish_date": "7/5/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Blues / 139998151, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/Yu80GEBrYq4",
+    "thumbnails": "https://img.youtube.com/vi/Yu80GEBrYq4/hq1.jpg",
+    "genre": "Blues",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 84445
+  },
+  {
+    "artist": "Julian Lage Trio",
+    "thing_type_id": 1,
+    "public_publish_date": "7/7/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Jazz / 10002, NPR Music Mobile / 124289519, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/GXMRg2snp1g",
+    "thumbnails": "https://img.youtube.com/vi/EQ603gAMQvE/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 166731
+  },
+  {
+    "artist": "Ben Sollee",
+    "thing_type_id": 1,
+    "public_publish_date": "7/11/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=xf29sAchQAw",
+    "thumbnails": "https://img.youtube.com/vi/xf29sAchQAw/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 187764
+  },
+  {
+    "artist": "Joe Boyd And Robyn Hitchcock",
+    "thing_type_id": 1,
+    "public_publish_date": "7/18/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=-XwZf3zpAH8",
+    "thumbnails": "https://img.youtube.com/vi/-XwZf3zpAH8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 33419
+  },
+  {
+    "artist": "Y La Bamba",
+    "thing_type_id": 1,
+    "public_publish_date": "7/21/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, World / 10004, Latin / 139996449, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=au-mBoepJUA",
+    "thumbnails": "https://img.youtube.com/vi/au-mBoepJUA/hq1.jpg",
+    "genre": "World, Latin, Rock",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 152759
+  },
+  {
+    "artist": "Givers",
+    "thing_type_id": 1,
+    "public_publish_date": "7/24/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=uNA3v08ygu8",
+    "thumbnails": "https://img.youtube.com/vi/uNA3v08ygu8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 163354
+  },
+  {
+    "artist": "They Might Be Giants",
+    "thing_type_id": 1,
+    "public_publish_date": "7/28/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=52tp2B4YR_c",
+    "thumbnails": "https://img.youtube.com/vi/52tp2B4YR_c/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 314782
+  },
+  {
+    "artist": "Amanda Shires",
+    "thing_type_id": 1,
+    "public_publish_date": "8/3/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Folk / 139999257, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ybBK0N0mCl4",
+    "thumbnails": "https://img.youtube.com/vi/ybBK0N0mCl4/hq1.jpg",
+    "genre": "Rock, Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 208440
+  },
+  {
+    "artist": "Noah And The Whale",
+    "thing_type_id": 1,
+    "public_publish_date": "8/10/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=efiBs11W1Ps",
+    "thumbnails": "https://img.youtube.com/vi/efiBs11W1Ps/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 934869
+  },
+  {
+    "artist": "Paul Jacobs",
+    "thing_type_id": 1,
+    "public_publish_date": "8/12/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, NPR Classical Live / 144933426, Classical / 10003, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=TlW29RhUkDc",
+    "thumbnails": "https://img.youtube.com/vi/TlW29RhUkDc/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 63993
+  },
+  {
+    "artist": "Gaby Moreno",
+    "thing_type_id": 1,
+    "public_publish_date": "8/15/2011",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, World / 10004, Music Videos / 1110, Latin / 139996449, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=sIdRsY5HJGw",
+    "thumbnails": "https://img.youtube.com/vi/sIdRsY5HJGw/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 444536
+  },
+  {
+    "artist": "Other Lives",
+    "thing_type_id": 1,
+    "public_publish_date": "8/18/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=zdX9TmoUid4",
+    "thumbnails": "https://img.youtube.com/vi/zdX9TmoUid4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 322794
+  },
+  {
+    "artist": "James Vincent McMorrow",
+    "thing_type_id": 1,
+    "public_publish_date": "8/25/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=F-u3SOPjN38",
+    "thumbnails": "https://img.youtube.com/vi/F-u3SOPjN38/hq1.jpg",
+    "genre": "Rock, Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 432407
+  },
+  {
+    "artist": "CALLmeKAT",
+    "thing_type_id": 1,
+    "public_publish_date": "8/29/2011",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=tOXCEV4V8Ks",
+    "thumbnails": "https://img.youtube.com/vi/tOXCEV4V8Ks/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 312887
+  },
+  {
+    "artist": "Phosphorescent",
+    "thing_type_id": 1,
+    "public_publish_date": "9/1/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=S8m_Oek-Xec",
+    "thumbnails": "https://img.youtube.com/vi/S8m_Oek-Xec/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 195983
+  },
+  {
+    "artist": "King Creosote And Jon Hopkins",
+    "thing_type_id": 1,
+    "public_publish_date": "9/4/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, Weekend Edition Sunday for September 4, 2011 / 140114464, Weekend Edition Sunday / 10, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ej8vMh28SJY",
+    "thumbnails": "https://img.youtube.com/vi/ej8vMh28SJY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 248996
+  },
+  {
+    "artist": "Foster The People",
+    "thing_type_id": 1,
+    "public_publish_date": "9/9/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=kMnDHUKGMWs",
+    "thumbnails": "https://img.youtube.com/vi/kMnDHUKGMWs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 4239508
+  },
+  {
+    "artist": "Diego Garcia",
+    "thing_type_id": 1,
+    "public_publish_date": "9/12/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, World / 10004, Tiny Desk / 92071316, Latin / 139996449, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=DjmHpDI89v8",
+    "thumbnails": "https://img.youtube.com/vi/DjmHpDI89v8/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 57252
+  },
+  {
+    "artist": "Sean Rowe",
+    "thing_type_id": 1,
+    "public_publish_date": "9/16/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=mTkmIgrj1CA",
+    "thumbnails": "https://img.youtube.com/vi/mTkmIgrj1CA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 159288
+  },
+  {
+    "artist": "Jeremy Messersmith",
+    "thing_type_id": 1,
+    "public_publish_date": "9/19/2011",
+    "aggregations": "Rock / 10001, Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=X-RVUGjCfug",
+    "thumbnails": "https://img.youtube.com/vi/X-RVUGjCfug/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 165844
+  },
+  {
+    "artist": "Beirut",
+    "thing_type_id": 1,
+    "public_publish_date": "9/21/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Z0UISCEe52Y",
+    "thumbnails": "https://img.youtube.com/vi/Z0UISCEe52Y/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 3697186
+  },
+  {
+    "artist": "Jenny Lin",
+    "thing_type_id": 1,
+    "public_publish_date": "9/26/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Classical / 10003, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=p1i28p_gyFI",
+    "thumbnails": "https://img.youtube.com/vi/p1i28p_gyFI/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 32212
+  },
+  {
+    "artist": "The Klezmatics",
+    "thing_type_id": 1,
+    "public_publish_date": "9/28/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=w4AC_-MoqMM",
+    "thumbnails": "https://img.youtube.com/vi/w4AC_-MoqMM/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 129781
+  },
+  {
+    "artist": "Trombone Shorty",
+    "thing_type_id": 1,
+    "public_publish_date": "9/29/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Jazz / 10002, Tiny Desk / 92071316, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=cwYAeUpH1NM",
+    "thumbnails": "https://img.youtube.com/vi/cwYAeUpH1NM/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 1468692
+  },
+  {
+    "artist": "Mates Of State",
+    "thing_type_id": 1,
+    "public_publish_date": "10/5/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=3gP3XrKpy1k",
+    "thumbnails": "https://img.youtube.com/vi/3gP3XrKpy1k/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 66623
+  },
+  {
+    "artist": "Grouplove",
+    "thing_type_id": 1,
+    "public_publish_date": "10/11/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/O7VbbXCvtTg",
+    "thumbnails": "https://img.youtube.com/vi/O7VbbXCvtTg/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 92602
+  },
+  {
+    "artist": "Chris Bathgate",
+    "thing_type_id": 1,
+    "public_publish_date": "10/14/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=WRJXePSFApU",
+    "thumbnails": "https://img.youtube.com/vi/WRJXePSFApU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 121776
+  },
+  {
+    "artist": "Wilco",
+    "thing_type_id": 1,
+    "public_publish_date": "10/17/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Live / 145307348, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=UZAKTCeE70Y",
+    "thumbnails": "https://img.youtube.com/vi/UZAKTCeE70Y/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 2398927
+  },
+  {
+    "artist": "Hilary Hahn",
+    "thing_type_id": 1,
+    "public_publish_date": "10/21/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, NPR Classical Live / 144933426, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=cBNTDlI1-nQ",
+    "thumbnails": "https://img.youtube.com/vi/cBNTDlI1-nQ/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 523243
+  },
+  {
+    "artist": "Ben Williams And Sound Effect",
+    "thing_type_id": 1,
+    "public_publish_date": "10/24/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Jazz / 10002, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=rsMLQVRS3ho",
+    "thumbnails": "https://img.youtube.com/vi/rsMLQVRS3ho/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 281435
+  },
+  {
+    "artist": "Lisa Hannigan",
+    "thing_type_id": 1,
+    "public_publish_date": "10/29/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=r-B_fkZfWjk",
+    "thumbnails": "https://img.youtube.com/vi/r-B_fkZfWjk/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 839516
+  },
+  {
+    "artist": "Juanes",
+    "thing_type_id": 1,
+    "public_publish_date": "11/3/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, World / 10004, Tiny Desk / 92071316, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=TG6NqII3Zuw",
+    "thumbnails": "https://img.youtube.com/vi/TG6NqII3Zuw/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 213400
+  },
+  {
+    "artist": "Jens Lekman",
+    "thing_type_id": 1,
+    "public_publish_date": "11/7/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=wftQvpqo6Rg",
+    "thumbnails": "https://img.youtube.com/vi/wftQvpqo6Rg/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 147980
+  },
+  {
+    "artist": "Marketa Irglova",
+    "thing_type_id": 1,
+    "public_publish_date": "11/10/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=4cwIj0tzPr4",
+    "thumbnails": "https://img.youtube.com/vi/4cwIj0tzPr4/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 174434
+  },
+  {
+    "artist": "Yo-Yo Ma, Edgar Meyer, Chris Thile And Stuart Duncan",
+    "thing_type_id": 1,
+    "public_publish_date": "11/17/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, NPR Classical Live / 144933426, Classical / 10003, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=O7EcT5YzKhQ",
+    "thumbnails": "https://img.youtube.com/vi/O7EcT5YzKhQ/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 3527971
+  },
+  {
+    "artist": "Joe Henry",
+    "thing_type_id": 1,
+    "public_publish_date": "11/21/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=MA--dI19Lfc",
+    "thumbnails": "https://img.youtube.com/vi/MA--dI19Lfc/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 82516
+  },
+  {
+    "artist": "Hospital Ships",
+    "thing_type_id": 1,
+    "public_publish_date": "11/23/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Z3LKrXt7570",
+    "thumbnails": "https://img.youtube.com/vi/Z3LKrXt7570/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 37033
+  },
+  {
+    "artist": "Gabriel Kahane",
+    "thing_type_id": 1,
+    "public_publish_date": "11/26/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Classical / 10003, Weekend Edition Sunday for November 27, 2011 / 142704979, Weekend Edition Sunday / 10, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/AwCd9yxgtwc",
+    "thumbnails": "https://img.youtube.com/vi/AwCd9yxgtwc/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 41892
+  },
+  {
+    "artist": "tUnE-yArDs",
+    "thing_type_id": 1,
+    "public_publish_date": "12/1/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=c8FML8QhcZo",
+    "thumbnails": "https://img.youtube.com/vi/c8FML8QhcZo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 667262
+  },
+  {
+    "artist": "I Wayne",
+    "thing_type_id": 1,
+    "public_publish_date": "12/12/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=jaaQSxUOwC0",
+    "thumbnails": "https://img.youtube.com/vi/jaaQSxUOwC0/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 133624
+  },
+  {
+    "artist": "Gem Club",
+    "thing_type_id": 1,
+    "public_publish_date": "12/16/2011",
+    "aggregations": "Music Videos / 1110, Music / 1039, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=0HK1KhJgUs4",
+    "thumbnails": "https://img.youtube.com/vi/0HK1KhJgUs4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 33572
+  },
+  {
+    "artist": "Maria Volonte",
+    "thing_type_id": 1,
+    "public_publish_date": "12/27/2011",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=hXy9_xjOrb8",
+    "thumbnails": "https://img.youtube.com/vi/hXy9_xjOrb8/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 41192
+  },
+  {
+    "artist": "Tinariwen",
+    "thing_type_id": 1,
+    "public_publish_date": "1/5/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=IdbBmqOUPlY",
+    "thumbnails": "https://img.youtube.com/vi/IdbBmqOUPlY/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 233044
+  },
+  {
+    "artist": "Le Butcherettes",
+    "thing_type_id": 1,
+    "public_publish_date": "1/9/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Live / 145307348, Latin / 139996449, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=19FnFxiQmKc",
+    "thumbnails": "https://img.youtube.com/vi/19FnFxiQmKc/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 201271
+  },
+  {
+    "artist": "Screaming Females",
+    "thing_type_id": 1,
+    "public_publish_date": "1/17/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=EPn9rgccqqw",
+    "thumbnails": "https://img.youtube.com/vi/EPn9rgccqqw/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 177116
+  },
+  {
+    "artist": "Jake Schepps' Expedition Quartet",
+    "thing_type_id": 1,
+    "public_publish_date": "1/19/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=4CP2ur8IJxo",
+    "thumbnails": "https://img.youtube.com/vi/4CP2ur8IJxo/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 32763
+  },
+  {
+    "artist": "Glenn Jones",
+    "thing_type_id": 1,
+    "public_publish_date": "1/23/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=uPXk1ElmzGs",
+    "thumbnails": "https://img.youtube.com/vi/uPXk1ElmzGs/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 87438
+  },
+  {
+    "artist": "Anna Calvi",
+    "thing_type_id": 1,
+    "public_publish_date": "1/26/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=EScw2XrUHFY",
+    "thumbnails": "https://img.youtube.com/vi/EScw2XrUHFY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 477354
+  },
+  {
+    "artist": "Girl In A Coma",
+    "thing_type_id": 1,
+    "public_publish_date": "1/30/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=je2HSRcRruI",
+    "thumbnails": "https://img.youtube.com/vi/je2HSRcRruI/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 366141
+  },
+  {
+    "artist": "Bill Frisell",
+    "thing_type_id": 1,
+    "public_publish_date": "2/3/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Jazz / 10002, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=NO-1Euq2RBk",
+    "thumbnails": "https://img.youtube.com/vi/NO-1Euq2RBk/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 758986
+  },
+  {
+    "artist": "The Creole Choir Of Cuba",
+    "thing_type_id": 1,
+    "public_publish_date": "2/6/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, World / 10004, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=pJSv2hoH5ro",
+    "thumbnails": "https://img.youtube.com/vi/pJSv2hoH5ro/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 52334
+  },
+  {
+    "artist": "Craig Finn",
+    "thing_type_id": 1,
+    "public_publish_date": "2/9/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=J8QBpfCSlLE",
+    "thumbnails": "https://img.youtube.com/vi/J8QBpfCSlLE/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 34900
+  },
+  {
+    "artist": "Red Baraat",
+    "thing_type_id": 1,
+    "public_publish_date": "2/14/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=0kQD1P0_KUs",
+    "thumbnails": "https://img.youtube.com/vi/0kQD1P0_KUs/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 218714
+  },
+  {
+    "artist": "Joan Soriano",
+    "thing_type_id": 1,
+    "public_publish_date": "2/16/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=XnCyyJhJCc0",
+    "thumbnails": "https://img.youtube.com/vi/XnCyyJhJCc0/hq1.jpg",
+    "genre": "World, Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 148151
+  },
+  {
+    "artist": "Joyce El Khoury And Brian Jagde",
+    "thing_type_id": 1,
+    "public_publish_date": "2/20/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Classical / 10003, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=SEkdTyBYha0",
+    "thumbnails": "https://img.youtube.com/vi/SEkdTyBYha0/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 65349
+  },
+  {
+    "artist": "The Cranberries",
+    "thing_type_id": 1,
+    "public_publish_date": "2/23/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013, Home Page Top Stories / 1002, NPR Stories For Apple News / 434975886",
+    "YouTube": "https://www.youtube.com/watch?v=hxsJvKYyVyg",
+    "thumbnails": "https://img.youtube.com/vi/hxsJvKYyVyg/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 15658411
+  },
+  {
+    "artist": "Milagres",
+    "thing_type_id": 1,
+    "public_publish_date": "2/27/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=R3mKyzJRCUo",
+    "thumbnails": "https://img.youtube.com/vi/R3mKyzJRCUo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 17310
+  },
+  {
+    "artist": "Pistolera",
+    "thing_type_id": 1,
+    "public_publish_date": "3/1/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=9_FL_Vc3yZU",
+    "thumbnails": "https://img.youtube.com/vi/9_FL_Vc3yZU/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 25677
+  },
+  {
+    "artist": "Laura Gibson Plays Tiny Desk Concert No. 200",
+    "thing_type_id": 1,
+    "public_publish_date": "3/5/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=jhxi64JvhGw",
+    "thumbnails": "https://img.youtube.com/vi/jhxi64JvhGw/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 32949
+  },
+  {
+    "artist": "Rudresh Mahanthappa",
+    "thing_type_id": 1,
+    "public_publish_date": "3/8/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Jazz / 10002, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=58KepbLWzus",
+    "thumbnails": "https://img.youtube.com/vi/58KepbLWzus/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 87713
+  },
+  {
+    "artist": "Real Estate",
+    "thing_type_id": 1,
+    "public_publish_date": "3/12/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=jE6R7yglXpU",
+    "thumbnails": "https://img.youtube.com/vi/jE6R7yglXpU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 101913
+  },
+  {
+    "artist": "Kayhan Kalhor",
+    "thing_type_id": 1,
+    "public_publish_date": "3/24/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=jMEjPKBvhzE",
+    "thumbnails": "https://img.youtube.com/vi/jMEjPKBvhzE/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 182681
+  },
+  {
+    "artist": "First Aid Kit",
+    "thing_type_id": 1,
+    "public_publish_date": "3/28/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Jtx7q7_IUXc",
+    "thumbnails": "https://img.youtube.com/vi/Jtx7q7_IUXc/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 427485
+  },
+  {
+    "artist": "So Percussion",
+    "thing_type_id": 1,
+    "public_publish_date": "4/2/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Classical / 10003, NPR Classical Live / 144933426, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=3EDGt5l5_20",
+    "thumbnails": "https://img.youtube.com/vi/3EDGt5l5_20/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 98017
+  },
+  {
+    "artist": "Kathleen Edwards",
+    "thing_type_id": 1,
+    "public_publish_date": "4/5/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=kW6WICBscx4",
+    "thumbnails": "https://img.youtube.com/vi/kW6WICBscx4/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 191527
+  },
+  {
+    "artist": "Caveman",
+    "thing_type_id": 1,
+    "public_publish_date": "4/10/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=BYbSJfd870Q",
+    "thumbnails": "https://img.youtube.com/vi/BYbSJfd870Q/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 53286
+  },
+  {
+    "artist": "Novalima",
+    "thing_type_id": 1,
+    "public_publish_date": "4/12/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/aLavBHtwRX4",
+    "thumbnails": "https://img.youtube.com/vi/aLavBHtwRX4/hq1.jpg",
+    "genre": "Latin, World",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 47422
+  },
+  {
+    "artist": "Soweto Gospel Choir",
+    "thing_type_id": 1,
+    "public_publish_date": "4/16/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, World / 10004, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=niHNuc0uxIE",
+    "thumbnails": "https://img.youtube.com/vi/niHNuc0uxIE/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 118590
+  },
+  {
+    "artist": "Jolie Holland",
+    "thing_type_id": 1,
+    "public_publish_date": "4/23/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=4ul6kP887xA",
+    "thumbnails": "https://img.youtube.com/vi/4ul6kP887xA/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 145231
+  },
+  {
+    "artist": "Cowboy Junkies",
+    "thing_type_id": 1,
+    "public_publish_date": "4/26/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=1URQ0_9-Zyw",
+    "thumbnails": "https://img.youtube.com/vi/1URQ0_9-Zyw/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 222822
+  },
+  {
+    "artist": "Hospitality",
+    "thing_type_id": 1,
+    "public_publish_date": "4/30/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=L9Ug2jsFQII",
+    "thumbnails": "https://img.youtube.com/vi/L9Ug2jsFQII/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 59478
+  },
+  {
+    "artist": "Nathan Salsburg",
+    "thing_type_id": 1,
+    "public_publish_date": "5/3/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ZNIpnL204f4",
+    "thumbnails": "https://img.youtube.com/vi/ZNIpnL204f4/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 47133
+  },
+  {
+    "artist": "Endangered Blood",
+    "thing_type_id": 1,
+    "public_publish_date": "5/7/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Jazz / 10002, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=3rHD1_kUC5E",
+    "thumbnails": "https://img.youtube.com/vi/3rHD1_kUC5E/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 46161
+  },
+  {
+    "artist": "Kishi Bashi",
+    "thing_type_id": 1,
+    "public_publish_date": "5/10/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=BgqAmZHkkTg",
+    "thumbnails": "https://img.youtube.com/vi/BgqAmZHkkTg/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 949852
+  },
+  {
+    "artist": "Pedro Soler And Gaspar Claus",
+    "thing_type_id": 1,
+    "public_publish_date": "5/14/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ZpnEn0A4ogc",
+    "thumbnails": "https://img.youtube.com/vi/ZpnEn0A4ogc/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 52069
+  },
+  {
+    "artist": "Chuck Brown",
+    "thing_type_id": 1,
+    "public_publish_date": "5/16/2012",
+    "aggregations": "Tiny Desk / 92071316, Music Videos / 1110, Music / 1039, R&amp;B/Soul / 139998808",
+    "YouTube": "https://www.youtube.com/watch?v=9ZjeheDR3tA",
+    "thumbnails": "https://img.youtube.com/vi/9ZjeheDR3tA/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 384066
+  },
+  {
+    "artist": "Arborea",
+    "thing_type_id": 1,
+    "public_publish_date": "5/17/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=7c_KKh1rmso",
+    "thumbnails": "https://img.youtube.com/vi/7c_KKh1rmso/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 49134
+  },
+  {
+    "artist": "Yann Tiersen",
+    "thing_type_id": 1,
+    "public_publish_date": "5/21/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=fgcheDWN5B8",
+    "thumbnails": "https://img.youtube.com/vi/fgcheDWN5B8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 153329
+  },
+  {
+    "artist": "Canadian Brass",
+    "thing_type_id": 1,
+    "public_publish_date": "5/26/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=-l-E3kyNcag",
+    "thumbnails": "https://img.youtube.com/vi/-l-E3kyNcag/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 460516
+  },
+  {
+    "artist": "Patrick Watson",
+    "thing_type_id": 1,
+    "public_publish_date": "5/31/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=b1DUKfmNuSs",
+    "thumbnails": "https://img.youtube.com/vi/b1DUKfmNuSs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 498555
+  },
+  {
+    "artist": "Kelly Hogan",
+    "thing_type_id": 1,
+    "public_publish_date": "6/4/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=3zCFPqGfNic",
+    "thumbnails": "https://img.youtube.com/vi/3zCFPqGfNic/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 79289
+  },
+  {
+    "artist": "Allison Miller's Boom Tic Boom",
+    "thing_type_id": 1,
+    "public_publish_date": "6/7/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Jazz / 10002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=5M9EJOTekxA",
+    "thumbnails": "https://img.youtube.com/vi/5M9EJOTekxA/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 86602
+  },
+  {
+    "artist": "Daniel Johnston",
+    "thing_type_id": 1,
+    "public_publish_date": "6/11/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=3OvWFurOBk8",
+    "thumbnails": "https://img.youtube.com/vi/3OvWFurOBk8/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 1328502
+  },
+  {
+    "artist": "Glen Hansard",
+    "thing_type_id": 1,
+    "public_publish_date": "6/17/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=IFlMFVwgIQI",
+    "thumbnails": "https://img.youtube.com/vi/IFlMFVwgIQI/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 353318
+  },
+  {
+    "artist": "Mariachi El Bronx",
+    "thing_type_id": 1,
+    "public_publish_date": "6/21/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=d8IMf7dBLuw",
+    "thumbnails": "https://img.youtube.com/vi/d8IMf7dBLuw/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 208323
+  },
+  {
+    "artist": "Reggie Watts",
+    "thing_type_id": 1,
+    "public_publish_date": "6/25/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Hip-Hop / 10005, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=dRmRr3Z8Zv8",
+    "thumbnails": "https://img.youtube.com/vi/dRmRr3Z8Zv8/hq1.jpg",
+    "genre": "Hip-Hop",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 2434130
+  },
+  {
+    "artist": "Exitmusic",
+    "thing_type_id": 1,
+    "public_publish_date": "7/2/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=EwnrkPo4eRQ",
+    "thumbnails": "https://img.youtube.com/vi/EwnrkPo4eRQ/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 93834
+  },
+  {
+    "artist": "Brandi Carlile",
+    "thing_type_id": 1,
+    "public_publish_date": "7/9/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=_ajWFc2VqWo",
+    "thumbnails": "https://img.youtube.com/vi/_ajWFc2VqWo/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 1540951
+  },
+  {
+    "artist": "Laura Marling",
+    "thing_type_id": 1,
+    "public_publish_date": "7/12/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=k4Ed6vT6a94",
+    "thumbnails": "https://img.youtube.com/vi/k4Ed6vT6a94/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 691874
+  },
+  {
+    "artist": "Souad Massi",
+    "thing_type_id": 1,
+    "public_publish_date": "7/15/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=so9Xt6eYoSI",
+    "thumbnails": "https://img.youtube.com/vi/so9Xt6eYoSI/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 85620
+  },
+  {
+    "artist": "The Milk Carton Kids",
+    "thing_type_id": 1,
+    "public_publish_date": "7/16/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=fp0xjVzmKxY",
+    "thumbnails": "https://img.youtube.com/vi/fp0xjVzmKxY/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 1813035
+  },
+  {
+    "artist": "Janet Feder",
+    "thing_type_id": 1,
+    "public_publish_date": "7/22/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=xa0P41jRrUM",
+    "thumbnails": "https://img.youtube.com/vi/xa0P41jRrUM/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 35485
+  },
+  {
+    "artist": "The Walkmen",
+    "thing_type_id": 1,
+    "public_publish_date": "7/29/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=nHAPJaeacGE",
+    "thumbnails": "https://img.youtube.com/vi/nHAPJaeacGE/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 174162
+  },
+  {
+    "artist": "Beth Orton",
+    "thing_type_id": 1,
+    "public_publish_date": "8/6/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Folk / 139999257, NPR Music Mobile / 124289519, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=hZ2lMzQf19U",
+    "thumbnails": "https://img.youtube.com/vi/hZ2lMzQf19U/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 134878
+  },
+  {
+    "artist": "The Zombies",
+    "thing_type_id": 1,
+    "public_publish_date": "8/12/2012",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Rock / 10001, Music Videos / 1110, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=NrpX8HgQxOw",
+    "thumbnails": "https://img.youtube.com/vi/NrpX8HgQxOw/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 107377
+  },
+  {
+    "artist": "Rufus Wainwright",
+    "thing_type_id": 1,
+    "public_publish_date": "8/20/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=xCmcvsCxfng",
+    "thumbnails": "https://img.youtube.com/vi/xCmcvsCxfng/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 382203
+  },
+  {
+    "artist": "Renaud Garcia-Fons",
+    "thing_type_id": 1,
+    "public_publish_date": "8/27/2012",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Jazz / 10002, NPR Music Mobile / 124289519, Music Videos / 1110, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=2ZNKLUHeJtg",
+    "thumbnails": "https://img.youtube.com/vi/2ZNKLUHeJtg/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 221062
+  },
+  {
+    "artist": "Avi Avital",
+    "thing_type_id": 1,
+    "public_publish_date": "9/10/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Classical / 10003, Classical Notes Newsletter / 126368442, NPR Classical Live / 144933426, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=S19Q4e4Q4Kk",
+    "thumbnails": "https://img.youtube.com/vi/S19Q4e4Q4Kk/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 141305
+  },
+  {
+    "artist": "Amanda Palmer And The Grand Theft Orchestra",
+    "thing_type_id": 1,
+    "public_publish_date": "9/17/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=LRix5o2-fiU",
+    "thumbnails": "https://img.youtube.com/vi/LRix5o2-fiU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 134382
+  },
+  {
+    "artist": "Yva Las Vegass",
+    "thing_type_id": 1,
+    "public_publish_date": "9/24/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=P19YL-fy3Vk",
+    "thumbnails": "https://img.youtube.com/vi/P19YL-fy3Vk/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 70225
+  },
+  {
+    "artist": "Spirit Family Reunion",
+    "thing_type_id": 1,
+    "public_publish_date": "10/8/2012",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, Music Videos / 1110, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=sefX1Ievnog",
+    "thumbnails": "https://img.youtube.com/vi/sefX1Ievnog/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 156995
+  },
+  {
+    "artist": "Dirty Three",
+    "thing_type_id": 1,
+    "public_publish_date": "10/15/2012",
+    "aggregations": "Music Videos / 1110, Music / 1039, Tiny Desk / 92071316, Rock / 10001, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=z1Lh06y6Z1Q",
+    "thumbnails": "https://img.youtube.com/vi/z1Lh06y6Z1Q/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 459980
+  },
+  {
+    "artist": "Lord Huron",
+    "thing_type_id": 1,
+    "public_publish_date": "10/25/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=W9eiq-ctKDY",
+    "thumbnails": "https://img.youtube.com/vi/W9eiq-ctKDY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 853422
+  },
+  {
+    "artist": "Passion Pit",
+    "thing_type_id": 1,
+    "public_publish_date": "10/29/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Er4q34P5Pxs",
+    "thumbnails": "https://img.youtube.com/vi/Er4q34P5Pxs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 2100924
+  },
+  {
+    "artist": "Jason Lytle",
+    "thing_type_id": 1,
+    "public_publish_date": "11/5/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=FZF13DJf13k",
+    "thumbnails": "https://img.youtube.com/vi/FZF13DJf13k/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 116300
+  },
+  {
+    "artist": "Flaco Jimenez",
+    "thing_type_id": 1,
+    "public_publish_date": "11/12/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=gOMRNSmwa3U",
+    "thumbnails": "https://img.youtube.com/vi/gOMRNSmwa3U/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 231429
+  },
+  {
+    "artist": "Ben Gibbard",
+    "thing_type_id": 1,
+    "public_publish_date": "11/19/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=wMj-Ai9NOjY",
+    "thumbnails": "https://img.youtube.com/vi/wMj-Ai9NOjY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 521996
+  },
+  {
+    "artist": "Taken By Trees",
+    "thing_type_id": 1,
+    "public_publish_date": "11/29/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Pop / 139997200, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=c_RLDyJRWaI",
+    "thumbnails": "https://img.youtube.com/vi/c_RLDyJRWaI/hq1.jpg",
+    "genre": "Pop",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 140897
+  },
+  {
+    "artist": "Anaïs Mitchell",
+    "thing_type_id": 1,
+    "public_publish_date": "12/6/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Shr47LVcA5I",
+    "thumbnails": "https://img.youtube.com/vi/Shr47LVcA5I/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 614749
+  },
+  {
+    "artist": "Lyle Lovett",
+    "thing_type_id": 1,
+    "public_publish_date": "12/10/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Country / 92792712, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=LFs3XUqJvNg",
+    "thumbnails": "https://img.youtube.com/vi/LFs3XUqJvNg/hq1.jpg",
+    "genre": "Country",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 1218225
+  },
+  {
+    "artist": "Alt-J",
+    "thing_type_id": 1,
+    "public_publish_date": "12/17/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=8zHdLF3-coA",
+    "thumbnails": "https://img.youtube.com/vi/8zHdLF3-coA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 5352259
+  },
+  {
+    "artist": "The Polyphonic Spree",
+    "thing_type_id": 1,
+    "public_publish_date": "12/21/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Pop / 139997200, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=6D5r_7UW8eA",
+    "thumbnails": "https://img.youtube.com/vi/6D5r_7UW8eA/hq1.jpg",
+    "genre": "Pop",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 120968
+  },
+  {
+    "artist": "Miguel",
+    "thing_type_id": 1,
+    "public_publish_date": "12/31/2012",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, R&amp;B/Soul / 139998808, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=n7w0-KgZMdY",
+    "thumbnails": "https://img.youtube.com/vi/n7w0-KgZMdY/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 3372907
+  },
+  {
+    "artist": "Lucius",
+    "thing_type_id": 1,
+    "public_publish_date": "1/7/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Pop / 139997200, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=8Pk_2dVPjms",
+    "thumbnails": "https://img.youtube.com/vi/8Pk_2dVPjms/hq1.jpg",
+    "genre": "Pop",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 1082106
+  },
+  {
+    "artist": "Black Prairie",
+    "thing_type_id": 1,
+    "public_publish_date": "1/14/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=0mzjL5147i4",
+    "thumbnails": "https://img.youtube.com/vi/0mzjL5147i4/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 83453
+  },
+  {
+    "artist": "Cantus",
+    "thing_type_id": 1,
+    "public_publish_date": "2/4/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Classical / 10003, Classical Notes Newsletter / 126368442, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=6I0Dk8cdfCA",
+    "thumbnails": "https://img.youtube.com/vi/6I0Dk8cdfCA/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 231560
+  },
+  {
+    "artist": "Night Beds",
+    "thing_type_id": 1,
+    "public_publish_date": "2/18/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, NPR Music Mobile / 124289519, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=wlQEPlj5JAA",
+    "thumbnails": "https://img.youtube.com/vi/wlQEPlj5JAA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 118782
+  },
+  {
+    "artist": "Mary Halvorson Quintet",
+    "thing_type_id": 1,
+    "public_publish_date": "2/25/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Jazz / 10002, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=xJwyBBcP51A",
+    "thumbnails": "https://img.youtube.com/vi/xJwyBBcP51A/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 296561
+  },
+  {
+    "artist": "The Lone Bellow",
+    "thing_type_id": 1,
+    "public_publish_date": "3/4/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=zJyf5NqiMNE",
+    "thumbnails": "https://img.youtube.com/vi/zJyf5NqiMNE/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 568049
+  },
+  {
+    "artist": "Martin Hayes & Dennis Cahill",
+    "thing_type_id": 1,
+    "public_publish_date": "3/11/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=o5hg3iuoJoM",
+    "thumbnails": "https://img.youtube.com/vi/o5hg3iuoJoM/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 126583
+  },
+  {
+    "artist": "Yo La Tengo",
+    "thing_type_id": 1,
+    "public_publish_date": "4/15/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/dFiytMtU0Mw",
+    "thumbnails": "https://img.youtube.com/vi/dFiytMtU0Mw/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 119409
+  },
+  {
+    "artist": "Omar Sosa & Paolo Fresu",
+    "thing_type_id": 1,
+    "public_publish_date": "4/22/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Jazz / 10002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=RJMQkye_YTw",
+    "thumbnails": "https://img.youtube.com/vi/RJMQkye_YTw/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 270631
+  },
+  {
+    "artist": "Father Figures",
+    "thing_type_id": 1,
+    "public_publish_date": "4/29/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Jazz / 10002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=Z64OB3NiXFQ",
+    "thumbnails": "https://img.youtube.com/vi/Z64OB3NiXFQ/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 89479
+  },
+  {
+    "artist": "Nicola Benedetti",
+    "thing_type_id": 1,
+    "public_publish_date": "5/6/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Classical / 10003, Classical Notes Newsletter / 126368442, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=m1-Si874NWw",
+    "thumbnails": "https://img.youtube.com/vi/m1-Si874NWw/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 126959
+  },
+  {
+    "artist": "Buddy Miller & Jim Lauderdale",
+    "thing_type_id": 1,
+    "public_publish_date": "5/13/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ggIwlQ5u0a4",
+    "thumbnails": "https://img.youtube.com/vi/ggIwlQ5u0a4/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 101774
+  },
+  {
+    "artist": "Mohammad Reza Shajarian",
+    "thing_type_id": 1,
+    "public_publish_date": "5/20/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, World / 10004, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=GnI4R9Bdl3g",
+    "thumbnails": "https://img.youtube.com/vi/GnI4R9Bdl3g/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 872127
+  },
+  {
+    "artist": "The National",
+    "thing_type_id": 1,
+    "public_publish_date": "6/10/2013",
+    "aggregations": "Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=TdFCD3oXMZo",
+    "thumbnails": "https://img.youtube.com/vi/TdFCD3oXMZo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 5311759
+  },
+  {
+    "artist": "NO BS! Brass Band",
+    "thing_type_id": 1,
+    "public_publish_date": "6/15/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Jazz / 10002, Home Page Top Stories / 1002, All Music Live Events / 314884013, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579",
+    "YouTube": "https://www.youtube.com/watch?v=MEjNggZsWow",
+    "thumbnails": "https://img.youtube.com/vi/MEjNggZsWow/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 1884020
+  },
+  {
+    "artist": "Billy Bragg",
+    "thing_type_id": 1,
+    "public_publish_date": "6/17/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Songs Considered Newsletter / 179840764, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=q2OnQR6VMwU",
+    "thumbnails": "https://img.youtube.com/vi/q2OnQR6VMwU/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 302362
+  },
+  {
+    "artist": "Maya Beiser",
+    "thing_type_id": 1,
+    "public_publish_date": "6/29/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Classical / 10003, Classical Notes Newsletter / 126368442, Home Page Top Stories / 1002, NPR Classical Live / 144933426, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=UO0kGdxeQvU",
+    "thumbnails": "https://img.youtube.com/vi/UO0kGdxeQvU/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 67190
+  },
+  {
+    "artist": "Laura Mvula",
+    "thing_type_id": 1,
+    "public_publish_date": "7/1/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, R&amp;B/Soul / 139998808, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=eT5DJ33-Fbg",
+    "thumbnails": "https://img.youtube.com/vi/eT5DJ33-Fbg/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 500926
+  },
+  {
+    "artist": "Cheick Hamala Diabate",
+    "thing_type_id": 1,
+    "public_publish_date": "7/6/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, World / 10004, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=ykEnSrhinvs",
+    "thumbnails": "https://img.youtube.com/vi/ykEnSrhinvs/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 108168
+  },
+  {
+    "artist": "Skinny Lister",
+    "thing_type_id": 1,
+    "public_publish_date": "7/8/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=WV0xX1hAJok",
+    "thumbnails": "https://img.youtube.com/vi/WV0xX1hAJok/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 119697
+  },
+  {
+    "artist": "Frank Turner",
+    "thing_type_id": 1,
+    "public_publish_date": "7/13/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Folk / 139999257, Tiny Desk / 92071316, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=nF3U_t3yjic",
+    "thumbnails": "https://img.youtube.com/vi/nF3U_t3yjic/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 508420
+  },
+  {
+    "artist": "Alice Russell",
+    "thing_type_id": 1,
+    "public_publish_date": "7/15/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Pop / 139997200, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=5xNy40dQCNQ",
+    "thumbnails": "https://img.youtube.com/vi/5xNy40dQCNQ/hq1.jpg",
+    "genre": "Pop",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 99961
+  },
+  {
+    "artist": "Cheyenne Mize",
+    "thing_type_id": 1,
+    "public_publish_date": "7/20/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=fS9uUDslHso",
+    "thumbnails": "https://img.youtube.com/vi/fS9uUDslHso/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 103581
+  },
+  {
+    "artist": "Guards",
+    "thing_type_id": 1,
+    "public_publish_date": "7/22/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=2-1aLFQWOvs",
+    "thumbnails": "https://img.youtube.com/vi/2-1aLFQWOvs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 93076
+  },
+  {
+    "artist": "Time For Three",
+    "thing_type_id": 1,
+    "public_publish_date": "7/27/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Classical / 10003, Home Page Top Stories / 1002, Classical Notes Newsletter / 126368442, NPR Classical Live / 144933426, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=34bgjdQRjIM",
+    "thumbnails": "https://img.youtube.com/vi/34bgjdQRjIM/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 134626
+  },
+  {
+    "artist": "Dana Falconberry",
+    "thing_type_id": 1,
+    "public_publish_date": "7/29/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=FowAzrMU0GU",
+    "thumbnails": "https://img.youtube.com/vi/FowAzrMU0GU/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 99541
+  },
+  {
+    "artist": "Keaton Henson",
+    "thing_type_id": 1,
+    "public_publish_date": "8/3/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=RZNrWmf4xH0",
+    "thumbnails": "https://img.youtube.com/vi/RZNrWmf4xH0/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 1998515
+  },
+  {
+    "artist": "Jim Guthrie",
+    "thing_type_id": 1,
+    "public_publish_date": "8/10/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Rock / 10001, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=7_qK8l4tDog",
+    "thumbnails": "https://img.youtube.com/vi/7_qK8l4tDog/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 75455
+  },
+  {
+    "artist": "The Front Bottoms",
+    "thing_type_id": 1,
+    "public_publish_date": "8/19/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=pc8U2VP92Vg",
+    "thumbnails": "https://img.youtube.com/vi/pc8U2VP92Vg/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 2130548
+  },
+  {
+    "artist": "Steve Gunn",
+    "thing_type_id": 1,
+    "public_publish_date": "8/31/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=2bMVMjOMRkU",
+    "thumbnails": "https://img.youtube.com/vi/2bMVMjOMRkU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 199281
+  },
+  {
+    "artist": "The 1975",
+    "thing_type_id": 1,
+    "public_publish_date": "9/10/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/5bIlkpQRyTM",
+    "thumbnails": "https://img.youtube.com/vi/5bIlkpQRyTM/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 3133290
+  },
+  {
+    "artist": "Arturo O'Farrill",
+    "thing_type_id": 1,
+    "public_publish_date": "9/14/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Jazz / 10002, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579",
+    "YouTube": "https://youtu.be/UhMRD7lw5zs",
+    "thumbnails": "https://img.youtube.com/vi/UhMRD7lw5zs/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 72340
+  },
+  {
+    "artist": "Shovels & Rope",
+    "thing_type_id": 1,
+    "public_publish_date": "9/16/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Folk / 139999257, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/LbVD8k9qA6k",
+    "thumbnails": "https://img.youtube.com/vi/LbVD8k9qA6k/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 718969
+  },
+  {
+    "artist": "Oliver 'Tuku' Mtukudzi",
+    "thing_type_id": 1,
+    "public_publish_date": "9/30/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, World / 10004, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/11po9xKBsbw",
+    "thumbnails": "https://img.youtube.com/vi/11po9xKBsbw/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 1288961
+  },
+  {
+    "artist": "Lawrence Brownlee",
+    "thing_type_id": 1,
+    "public_publish_date": "10/5/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Home Page Top Stories / 1002, Classical / 10003, Classical Notes Newsletter / 126368442, NPR Classical Live / 144933426, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/HNY2u53wUbU",
+    "thumbnails": "https://img.youtube.com/vi/HNY2u53wUbU/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 92790
+  },
+  {
+    "artist": "Superchunk",
+    "thing_type_id": 1,
+    "public_publish_date": "10/7/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, All Songs Featured 2 / 164710643, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/Pvw42EIZxLU",
+    "thumbnails": "https://img.youtube.com/vi/Pvw42EIZxLU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 101103
+  },
+  {
+    "artist": "Valerie June",
+    "thing_type_id": 1,
+    "public_publish_date": "10/12/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Blues / 139998151, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/iBDrTHCSWDc",
+    "thumbnails": "https://img.youtube.com/vi/iBDrTHCSWDc/hq1.jpg",
+    "genre": "Blues",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 553867
+  },
+  {
+    "artist": "Matt Ulery's Loom",
+    "thing_type_id": 1,
+    "public_publish_date": "10/19/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Jazz / 10002, Home Page Top Stories / 1002, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579",
+    "YouTube": "https://youtu.be/Vs80WYJmVaw",
+    "thumbnails": "https://img.youtube.com/vi/Vs80WYJmVaw/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 147490
+  },
+  {
+    "artist": "Daughter",
+    "thing_type_id": 1,
+    "public_publish_date": "10/21/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/s-OoG1aGYO0",
+    "thumbnails": "https://img.youtube.com/vi/s-OoG1aGYO0/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 11906165
+  },
+  {
+    "artist": "San Fermin",
+    "thing_type_id": 1,
+    "public_publish_date": "10/28/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/2K9gjhbT7xs",
+    "thumbnails": "https://img.youtube.com/vi/2K9gjhbT7xs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 272500
+  },
+  {
+    "artist": "Neko Case",
+    "thing_type_id": 1,
+    "public_publish_date": "10/31/2013",
+    "aggregations": "Music / 1039, Rock / 10001, Tiny Desk / 92071316, Music Live Events / 142779528, NPR Music Live / 145307348, Home Page Top Stories / 1002, Music Videos / 1110, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/FwRcPEg1MyE",
+    "thumbnails": "https://img.youtube.com/vi/FwRcPEg1MyE/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 373739
+  },
+  {
+    "artist": "Ashley Monroe",
+    "thing_type_id": 1,
+    "public_publish_date": "11/3/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Country / 92792712, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/xoMzPhYYIsM",
+    "thumbnails": "https://img.youtube.com/vi/xoMzPhYYIsM/hq1.jpg",
+    "genre": "Country",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 135367
+  },
+  {
+    "artist": "Gary Burton",
+    "thing_type_id": 1,
+    "public_publish_date": "11/9/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Jazz / 10002, Home Page Top Stories / 1002, Public Radio Jazz Live / 144931957, All Music Live Events / 314884013, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579",
+    "YouTube": "https://youtu.be/fXjfvEcAV6w",
+    "thumbnails": "https://img.youtube.com/vi/fXjfvEcAV6w/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 717199
+  },
+  {
+    "artist": "Debashish Bhattacharya",
+    "thing_type_id": 1,
+    "public_publish_date": "11/12/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/q8WWNKhdy-w",
+    "thumbnails": "https://img.youtube.com/vi/q8WWNKhdy-w/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 171928
+  },
+  {
+    "artist": "John Legend",
+    "thing_type_id": 1,
+    "public_publish_date": "11/16/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, R&amp;B/Soul / 139998808, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/onQLAEEeta8",
+    "thumbnails": "https://img.youtube.com/vi/onQLAEEeta8/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 5879677
+  },
+  {
+    "artist": "Waxahatchee",
+    "thing_type_id": 1,
+    "public_publish_date": "11/23/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/3ZngH2T395A",
+    "thumbnails": "https://img.youtube.com/vi/3ZngH2T395A/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 233266
+  },
+  {
+    "artist": "Kronos Quartet",
+    "thing_type_id": 1,
+    "public_publish_date": "11/25/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Classical / 10003, Home Page Top Stories / 1002, Classical Notes Newsletter / 126368442, All Songs Featured 2 / 164710643, NPR Classical Live / 144933426, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/7PQYF4-BbrE",
+    "thumbnails": "https://img.youtube.com/vi/7PQYF4-BbrE/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 224870
+  },
+  {
+    "artist": "The Dismemberment Plan",
+    "thing_type_id": 1,
+    "public_publish_date": "12/2/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Rock / 10001, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/HnffuUtUkAA",
+    "thumbnails": "https://img.youtube.com/vi/HnffuUtUkAA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 95932
+  },
+  {
+    "artist": "Sarah Jarosz",
+    "thing_type_id": 1,
+    "public_publish_date": "12/7/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/VxpuB10FaSE",
+    "thumbnails": "https://img.youtube.com/vi/VxpuB10FaSE/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 782397
+  },
+  {
+    "artist": "Dessa",
+    "thing_type_id": 1,
+    "public_publish_date": "12/9/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Hip-Hop / 10005, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/GwN-WixHkAw",
+    "thumbnails": "https://img.youtube.com/vi/GwN-WixHkAw/hq1.jpg",
+    "genre": "Hip-Hop",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 470428
+  },
+  {
+    "artist": "Christine Salem",
+    "thing_type_id": 1,
+    "public_publish_date": "12/14/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/b2Eylm6_9_w",
+    "thumbnails": "https://img.youtube.com/vi/b2Eylm6_9_w/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 115482
+  },
+  {
+    "artist": "La Santa Cecilia",
+    "thing_type_id": 1,
+    "public_publish_date": "12/16/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Latin / 139996449, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/iT3YnNdorCg",
+    "thumbnails": "https://img.youtube.com/vi/iT3YnNdorCg/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 455637
+  },
+  {
+    "artist": "Preservation Hall Jazz Band",
+    "thing_type_id": 1,
+    "public_publish_date": "12/21/2013",
+    "aggregations": "Music / 1039, Music Videos / 1110, Jazz / 10002, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579",
+    "YouTube": "https://youtu.be/iYqZg-YQWH0",
+    "thumbnails": "https://img.youtube.com/vi/iYqZg-YQWH0/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 145713
+  },
+  {
+    "artist": "Van-Anh Vanessa Vo",
+    "thing_type_id": 1,
+    "public_publish_date": "1/4/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, World / 10004, Classical / 10003, Classical Notes Newsletter / 126368442, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/8y02Rv8sQzw",
+    "thumbnails": "https://img.youtube.com/vi/8y02Rv8sQzw/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 84591
+  },
+  {
+    "artist": "Lily & Madeleine",
+    "thing_type_id": 1,
+    "public_publish_date": "1/7/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/8XxFbJcswQk",
+    "thumbnails": "https://img.youtube.com/vi/8XxFbJcswQk/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 653688
+  },
+  {
+    "artist": "Afro Blue",
+    "thing_type_id": 1,
+    "public_publish_date": "1/13/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, All Music Live Events / 314884013, Blues / 139998151",
+    "YouTube": "https://youtu.be/PF0yNKroigk",
+    "thumbnails": "https://img.youtube.com/vi/PF0yNKroigk/hq1.jpg",
+    "genre": "Blues",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 134875
+  },
+  {
+    "artist": "Robert Glasper Experiment",
+    "thing_type_id": 1,
+    "public_publish_date": "1/20/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Jazz / 10002, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579",
+    "YouTube": "https://youtu.be/oGTVoX7AaRc",
+    "thumbnails": "https://img.youtube.com/vi/oGTVoX7AaRc/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 2206525
+  },
+  {
+    "artist": "Pixies",
+    "thing_type_id": 1,
+    "public_publish_date": "2/3/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/OcFHOGZ-6aM",
+    "thumbnails": "https://img.youtube.com/vi/OcFHOGZ-6aM/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 2631445
+  },
+  {
+    "artist": "Fanfare Ciocarlia",
+    "thing_type_id": 1,
+    "public_publish_date": "2/8/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/2mHFjJszcpU",
+    "thumbnails": "https://img.youtube.com/vi/2mHFjJszcpU/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 682546
+  },
+  {
+    "artist": "Suzanne Vega",
+    "thing_type_id": 1,
+    "public_publish_date": "2/10/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/AndEMO__p2U",
+    "thumbnails": "https://img.youtube.com/vi/AndEMO__p2U/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 3962922
+  },
+  {
+    "artist": "Cate Le Bon",
+    "thing_type_id": 1,
+    "public_publish_date": "2/18/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Songs Featured 2 / 164710643, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/PFEhLCP6jzs",
+    "thumbnails": "https://img.youtube.com/vi/PFEhLCP6jzs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 342585
+  },
+  {
+    "artist": "Sofia Rei",
+    "thing_type_id": 1,
+    "public_publish_date": "2/22/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Latin / 139996449, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/eKSjxfYbxzc",
+    "thumbnails": "https://img.youtube.com/vi/eKSjxfYbxzc/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 93998
+  },
+  {
+    "artist": "Brass Bed",
+    "thing_type_id": 1,
+    "public_publish_date": "2/24/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/e8IyZHwtsc0",
+    "thumbnails": "https://img.youtube.com/vi/e8IyZHwtsc0/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 58225
+  },
+  {
+    "artist": "Asaf Avidan",
+    "thing_type_id": 1,
+    "public_publish_date": "3/2/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/JRVDNBCdMFM",
+    "thumbnails": "https://img.youtube.com/vi/JRVDNBCdMFM/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 305224
+  },
+  {
+    "artist": "Lowland Hum",
+    "thing_type_id": 1,
+    "public_publish_date": "3/6/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/l9coJQW9f4E",
+    "thumbnails": "https://img.youtube.com/vi/l9coJQW9f4E/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 103787
+  },
+  {
+    "artist": "Jake Bugg",
+    "thing_type_id": 1,
+    "public_publish_date": "3/10/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/jfHxncKnUuQ",
+    "thumbnails": "https://img.youtube.com/vi/jfHxncKnUuQ/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 727631
+  },
+  {
+    "artist": "Diane Cluck",
+    "thing_type_id": 1,
+    "public_publish_date": "3/17/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/SyETsd-rKP8",
+    "thumbnails": "https://img.youtube.com/vi/SyETsd-rKP8/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 126696
+  },
+  {
+    "artist": "Joseph Calleja",
+    "thing_type_id": 1,
+    "public_publish_date": "3/24/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Classical Notes Newsletter / 126368442, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/b9sBFoufLd8",
+    "thumbnails": "https://img.youtube.com/vi/b9sBFoufLd8/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 51737
+  },
+  {
+    "artist": "The Both",
+    "thing_type_id": 1,
+    "public_publish_date": "4/7/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/nivz7x_TMK4",
+    "thumbnails": "https://img.youtube.com/vi/nivz7x_TMK4/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 164564
+  },
+  {
+    "artist": "Tom Brosseau",
+    "thing_type_id": 1,
+    "public_publish_date": "4/12/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, NPR Music Mobile / 124289519, Tiny Desk / 92071316, Folk / 139999257, Home Page Top Stories / 1002, All Songs TV / 146587997, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/Pd2wNvTlfE0",
+    "thumbnails": "https://img.youtube.com/vi/Pd2wNvTlfE0/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 130551
+  },
+  {
+    "artist": "Courtney Barnett",
+    "thing_type_id": 1,
+    "public_publish_date": "4/14/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs TV / 146587997, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/Xv-FOSJIwrU",
+    "thumbnails": "https://img.youtube.com/vi/Xv-FOSJIwrU/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 2150073
+  },
+  {
+    "artist": "Federico Aubele",
+    "thing_type_id": 1,
+    "public_publish_date": "4/21/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Latin / 139996449, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/1lc8mAiOUPA",
+    "thumbnails": "https://img.youtube.com/vi/1lc8mAiOUPA/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 71110
+  },
+  {
+    "artist": "Quilt",
+    "thing_type_id": 1,
+    "public_publish_date": "4/26/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Songs TV / 146587997, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/TQ0qy5isP6A",
+    "thumbnails": "https://img.youtube.com/vi/TQ0qy5isP6A/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 102750
+  },
+  {
+    "artist": "Johnnyswim",
+    "thing_type_id": 1,
+    "public_publish_date": "4/28/2014",
+    "aggregations": "Music / 1039, Tiny Desk / 92071316, Pop / 139997200, Music Videos / 1110, All Songs TV / 146587997, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=l0f6KGsrt-4",
+    "thumbnails": "https://img.youtube.com/vi/l0f6KGsrt-4/hq1.jpg",
+    "genre": "Pop",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 468409
+  },
+  {
+    "artist": "Cian Nugent",
+    "thing_type_id": 1,
+    "public_publish_date": "5/3/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=YVzjKyzX8kA",
+    "thumbnails": "https://img.youtube.com/vi/YVzjKyzX8kA/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 67407
+  },
+  {
+    "artist": "Public Service Broadcasting",
+    "thing_type_id": 1,
+    "public_publish_date": "5/5/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Electronic/Dance / 135408474, Home Page Top Stories / 1002, All Songs TV / 146587997, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://youtu.be/UuSpXmGYw3c",
+    "thumbnails": "https://img.youtube.com/vi/UuSpXmGYw3c/hq1.jpg",
+    "genre": "Electronic/Dance",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 167310
+  },
+  {
+    "artist": "Timber Timbre",
+    "thing_type_id": 1,
+    "public_publish_date": "5/10/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Songs TV / 146587997, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=cSl4AZNwI94",
+    "thumbnails": "https://img.youtube.com/vi/cSl4AZNwI94/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 384298
+  },
+  {
+    "artist": "Chvrches",
+    "thing_type_id": 1,
+    "public_publish_date": "5/12/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Pop / 139997200, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=haunJARHPm4",
+    "thumbnails": "https://img.youtube.com/vi/haunJARHPm4/hq1.jpg",
+    "genre": "Pop",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 1732407
+  },
+  {
+    "artist": "Iestyn Davies",
+    "thing_type_id": 1,
+    "public_publish_date": "5/17/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, Classical Notes Newsletter / 126368442, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=YuwvUoD3Og8",
+    "thumbnails": "https://img.youtube.com/vi/YuwvUoD3Og8/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 102619
+  },
+  {
+    "artist": "Ages And Ages",
+    "thing_type_id": 1,
+    "public_publish_date": "5/20/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, NPR Music Mobile / 124289519, All Songs TV / 146587997, All Songs Featured 2 / 164710643, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=PwEFg6xEVR8",
+    "thumbnails": "https://img.youtube.com/vi/PwEFg6xEVR8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 264506
+  },
+  {
+    "artist": "Yasmine Hamdan",
+    "thing_type_id": 1,
+    "public_publish_date": "5/24/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=TylWetspLXg",
+    "thumbnails": "https://img.youtube.com/vi/TylWetspLXg/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 489232
+  },
+  {
+    "artist": "Hozier",
+    "thing_type_id": 1,
+    "public_publish_date": "5/27/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Folk / 139999257, All Songs TV / 146587997, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=oLgZo6Qi3Uo",
+    "thumbnails": "https://img.youtube.com/vi/oLgZo6Qi3Uo/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 11210773
+  },
+  {
+    "artist": "Juana Molina",
+    "thing_type_id": 1,
+    "public_publish_date": "5/31/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Latin / 139996449, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=he-eAyHRfFg",
+    "thumbnails": "https://img.youtube.com/vi/he-eAyHRfFg/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 282964
+  },
+  {
+    "artist": "Simone Dinnerstein",
+    "thing_type_id": 1,
+    "public_publish_date": "6/2/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, Classical Notes Newsletter / 126368442, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=HbMXaZrdcNY",
+    "thumbnails": "https://img.youtube.com/vi/HbMXaZrdcNY/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 62448
+  },
+  {
+    "artist": "Marian McLaughlin",
+    "thing_type_id": 1,
+    "public_publish_date": "6/7/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Songs Featured 2 / 164710643, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=f3Y55KWAhjs",
+    "thumbnails": "https://img.youtube.com/vi/f3Y55KWAhjs/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 49306
+  },
+  {
+    "artist": "Eliot Fisk And Paco Peña",
+    "thing_type_id": 1,
+    "public_publish_date": "6/14/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, NPR Music Mobile / 124289519, Home Page Top Stories / 1002, All Music Live Events / 314884013, Classical Notes Newsletter / 126368442",
+    "YouTube": "https://www.youtube.com/watch?v=PDdudDaWdqY",
+    "thumbnails": "https://img.youtube.com/vi/PDdudDaWdqY/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 196884
+  },
+  {
+    "artist": "Rodney Crowell",
+    "thing_type_id": 1,
+    "public_publish_date": "6/16/2014",
+    "aggregations": "Music / 1039, Music Videos / 1110, Tiny Desk / 92071316, Country / 92792712, All Music Live Events / 314884013",
+    "YouTube": "https://www.youtube.com/watch?v=KjqQLTCU5fU",
+    "thumbnails": "https://img.youtube.com/vi/KjqQLTCU5fU/hq1.jpg",
+    "genre": "Country",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 96546
+  },
+  {
+    "artist": "Mali Music",
+    "thing_type_id": 1,
+    "public_publish_date": "6/21/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, R&amp;B/Soul / 139998808, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=xm6Bf7dkp6E",
+    "thumbnails": "https://img.youtube.com/vi/xm6Bf7dkp6E/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 483791
+  },
+  {
+    "artist": "Conor Oberst",
+    "thing_type_id": 1,
+    "public_publish_date": "6/23/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002, All Songs TV / 146587997, All Songs Featured 2 / 164710643",
+    "YouTube": "https://www.youtube.com/watch?v=NIfTCmwgIbY",
+    "thumbnails": "https://img.youtube.com/vi/NIfTCmwgIbY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 849288
+  },
+  {
+    "artist": "Tracy Silverman",
+    "thing_type_id": 1,
+    "public_publish_date": "6/28/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, Home Page Top Stories / 1002, Classical Notes Newsletter / 126368442",
+    "YouTube": "https://www.youtube.com/watch?v=vDcs3N__VJc",
+    "thumbnails": "https://img.youtube.com/vi/vDcs3N__VJc/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 80873
+  },
+  {
+    "artist": "Lydia Loveless",
+    "thing_type_id": 1,
+    "public_publish_date": "7/1/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, All Songs Featured 2 / 164710643",
+    "YouTube": "https://www.youtube.com/watch?v=3XyKhTwk9X8",
+    "thumbnails": "https://img.youtube.com/vi/3XyKhTwk9X8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 141370
+  },
+  {
+    "artist": "The Foreign Exchange",
+    "thing_type_id": 1,
+    "public_publish_date": "7/5/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, R&amp;B/Soul / 139998808, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=Bnq9rz8SHC0",
+    "thumbnails": "https://img.youtube.com/vi/Bnq9rz8SHC0/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 289795
+  },
+  {
+    "artist": "Moon Hooch",
+    "thing_type_id": 1,
+    "public_publish_date": "7/7/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Rock / 10001, All Songs Featured 2 / 164710643, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=wwBhxBBa7tE",
+    "thumbnails": "https://img.youtube.com/vi/wwBhxBBa7tE/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 4842364
+  },
+  {
+    "artist": "John Grant",
+    "thing_type_id": 1,
+    "public_publish_date": "7/13/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=YYdAE6a0ZH0",
+    "thumbnails": "https://img.youtube.com/vi/YYdAE6a0ZH0/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 91617
+  },
+  {
+    "artist": "Holly Williams",
+    "thing_type_id": 1,
+    "public_publish_date": "7/14/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Country / 92792712, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=3h8Y3cZi66Y",
+    "thumbnails": "https://img.youtube.com/vi/3h8Y3cZi66Y/hq1.jpg",
+    "genre": "Country",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 160358
+  },
+  {
+    "artist": "Marisa Anderson",
+    "thing_type_id": 1,
+    "public_publish_date": "7/19/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=2JiLsYfbWD8",
+    "thumbnails": "https://img.youtube.com/vi/2JiLsYfbWD8/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 113629
+  },
+  {
+    "artist": "Hamilton Leithauser",
+    "thing_type_id": 1,
+    "public_publish_date": "7/21/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=iPJlmxnjnOc",
+    "thumbnails": "https://img.youtube.com/vi/iPJlmxnjnOc/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 127629
+  },
+  {
+    "artist": "Highasakite",
+    "thing_type_id": 1,
+    "public_publish_date": "7/25/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=taEcgisSiNs",
+    "thumbnails": "https://img.youtube.com/vi/taEcgisSiNs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 276821
+  },
+  {
+    "artist": "Saintseneca",
+    "thing_type_id": 1,
+    "public_publish_date": "7/29/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316",
+    "YouTube": "https://www.youtube.com/watch?v=X8hnp9M4JCo",
+    "thumbnails": "https://img.youtube.com/vi/X8hnp9M4JCo/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 1460136
+  },
+  {
+    "artist": "Quetzal",
+    "thing_type_id": 1,
+    "public_publish_date": "8/2/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=uu5laJPLn7g",
+    "thumbnails": "https://img.youtube.com/vi/uu5laJPLn7g/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 118064
+  },
+  {
+    "artist": "The Family Crest",
+    "thing_type_id": 1,
+    "public_publish_date": "8/4/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316",
+    "YouTube": "https://www.youtube.com/watch?v=3OTnUlUox-U",
+    "thumbnails": "https://img.youtube.com/vi/3OTnUlUox-U/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 1137256
+  },
+  {
+    "artist": "Irene Diaz",
+    "thing_type_id": 1,
+    "public_publish_date": "8/9/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Latin / 139996449, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=KhpxH2QZ0-Q",
+    "thumbnails": "https://img.youtube.com/vi/KhpxH2QZ0-Q/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 143173
+  },
+  {
+    "artist": "Bob Mould",
+    "thing_type_id": 1,
+    "public_publish_date": "8/11/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=JROLUd6uRhA",
+    "thumbnails": "https://img.youtube.com/vi/JROLUd6uRhA/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 195186
+  },
+  {
+    "artist": "Pacifica Quartet",
+    "thing_type_id": 1,
+    "public_publish_date": "8/18/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Classical / 10003, Tiny Desk / 92071316, Home Page Top Stories / 1002, Classical Notes Newsletter / 126368442",
+    "YouTube": "https://www.youtube.com/watch?v=v57WNW-JsgY",
+    "thumbnails": "https://img.youtube.com/vi/v57WNW-JsgY/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 86999
+  },
+  {
+    "artist": "Rodrigo Amarante",
+    "thing_type_id": 1,
+    "public_publish_date": "8/23/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, World / 10004, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=ppDcuEyNoIU",
+    "thumbnails": "https://img.youtube.com/vi/ppDcuEyNoIU/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 1,
+    "Video Views": 1713183
+  },
+  {
+    "artist": "Nickel Creek",
+    "thing_type_id": 1,
+    "public_publish_date": "8/26/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=jFycqnOpifQ",
+    "thumbnails": "https://img.youtube.com/vi/jFycqnOpifQ/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 4732365
+  },
+  {
+    "artist": "Sturgill Simpson",
+    "thing_type_id": 1,
+    "public_publish_date": "8/30/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Country / 92792712, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=w5cMqD0WqYE",
+    "thumbnails": "https://img.youtube.com/vi/w5cMqD0WqYE/hq1.jpg",
+    "genre": "Country",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 7123474
+  },
+  {
+    "artist": "Trampled By Turtles",
+    "thing_type_id": 1,
+    "public_publish_date": "9/3/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, Folk / 139999257, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=PcoPedyXJVc",
+    "thumbnails": "https://img.youtube.com/vi/PcoPedyXJVc/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 681558
+  },
+  {
+    "artist": "Jessica Lea Mayfield",
+    "thing_type_id": 1,
+    "public_publish_date": "9/6/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, All Songs Featured 2 / 164710643, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=0kgySblHsVI",
+    "thumbnails": "https://img.youtube.com/vi/0kgySblHsVI/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 294905
+  },
+  {
+    "artist": "Justin Townes Earle",
+    "thing_type_id": 1,
+    "public_publish_date": "9/8/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=lnOHHywkTCs",
+    "thumbnails": "https://img.youtube.com/vi/lnOHHywkTCs/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 539206
+  },
+  {
+    "artist": "Luluc",
+    "thing_type_id": 1,
+    "public_publish_date": "9/15/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Rock / 10001, Tiny Desk / 92071316, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=c8a-7Yv3ktk",
+    "thumbnails": "https://img.youtube.com/vi/c8a-7Yv3ktk/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 128624
+  },
+  {
+    "artist": "Tweedy",
+    "thing_type_id": 1,
+    "public_publish_date": "9/22/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Tiny Desk / 92071316, All Songs Featured 2 / 164710643, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=iH7j8ZzW8QY",
+    "thumbnails": "https://img.youtube.com/vi/iH7j8ZzW8QY/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 384814
+  },
+  {
+    "artist": "Bio Ritmo",
+    "thing_type_id": 1,
+    "public_publish_date": "9/29/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Tiny Desk / 92071316, World / 10004",
+    "YouTube": "https://www.youtube.com/watch?v=n_4EMO8e-1Y",
+    "thumbnails": "https://img.youtube.com/vi/n_4EMO8e-1Y/hq1.jpg",
+    "genre": "World",
+    "happiness scale (1 = chill, 5 = party town)": 5,
+    "Video Views": 117422
+  },
+  {
+    "artist": "Ryan Keberle & Catharsis",
+    "thing_type_id": 1,
+    "public_publish_date": "10/4/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Jazz / 10002, Tiny Desk / 92071316, Jazz Night In America / 347139849, Jazz Night In America Videos / 347174484, Jazz Night In America: Video Episodes And Shorts / 347174579, Jazz Night In America / 351266753",
+    "YouTube": "https://www.youtube.com/watch?v=cU7ClSwoTp4",
+    "thumbnails": "https://img.youtube.com/vi/cU7ClSwoTp4/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 86522
+  },
+  {
+    "artist": "Jackson Browne",
+    "thing_type_id": 1,
+    "public_publish_date": "10/6/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Tiny Desk / 92071316, Folk / 139999257",
+    "YouTube": "https://www.youtube.com/watch?v=11HHue911Tg",
+    "thumbnails": "https://img.youtube.com/vi/11HHue911Tg/hq1.jpg",
+    "genre": "Folk",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 2794142
+  },
+  {
+    "artist": "Raquel Sofia",
+    "thing_type_id": 1,
+    "public_publish_date": "10/11/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Tiny Desk / 92071316, Latin / 139996449",
+    "YouTube": "https://www.youtube.com/watch?v=B6DLS5tahlM",
+    "thumbnails": "https://img.youtube.com/vi/B6DLS5tahlM/hq1.jpg",
+    "genre": "Latin",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 334458
+  },
+  {
+    "artist": "Ásgeir",
+    "thing_type_id": 1,
+    "public_publish_date": "10/18/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Tiny Desk / 92071316, Rock / 10001",
+    "YouTube": "https://www.youtube.com/watch?v=gxlA6JB3Z6w",
+    "thumbnails": "https://img.youtube.com/vi/gxlA6JB3Z6w/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 166586
+  },
+  {
+    "artist": "Anthony D'Amato",
+    "thing_type_id": 1,
+    "public_publish_date": "10/20/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Rock / 10001, Tiny Desk / 92071316",
+    "YouTube": "https://www.youtube.com/watch?v=LiGTTICtewQ",
+    "thumbnails": "https://img.youtube.com/vi/LiGTTICtewQ/hq1.jpg",
+    "genre": "Rock",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 168855
+  },
+  {
+    "artist": "Danish String Quartet",
+    "thing_type_id": 1,
+    "public_publish_date": "10/25/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Classical / 10003, Tiny Desk / 92071316, Classical Notes Newsletter / 126368442",
+    "YouTube": "https://www.youtube.com/watch?v=cfuEIHEZobc",
+    "thumbnails": "https://img.youtube.com/vi/cfuEIHEZobc/hq1.jpg",
+    "genre": "Classical",
+    "happiness scale (1 = chill, 5 = party town)": 3,
+    "Video Views": 741217
+  },
+  {
+    "artist": "T-Pain",
+    "thing_type_id": 1,
+    "public_publish_date": "10/29/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Tiny Desk / 92071316, R&amp;B/Soul / 139998808, Home Page Top Stories / 1002",
+    "YouTube": "https://www.youtube.com/watch?v=CIjXUg1s5gc",
+    "thumbnails": "https://img.youtube.com/vi/CIjXUg1s5gc/hq1.jpg",
+    "genre": "R&B/Soul",
+    "happiness scale (1 = chill, 5 = party town)": 2,
+    "Video Views": 23279348
+  },
+  {
+    "artist": "Sun Ra Arkestra",
+    "thing_type_id": 1,
+    "public_publish_date": "10/31/2014",
+    "aggregations": "Music / 1039, All Music Live Events / 314884013, Music Videos / 1110, Home Page Top Stories / 1002, Jazz / 10002, Tiny Desk / 92071316, All Songs TV / 146587997, All Songs Featured 2 / 164710643, Jazz Night In America Videos / 347174484, Jazz Night In America / 347139849, Jazz Night In America / 351266753, Google News Editor's Picks / 3121",
+    "YouTube": "https://www.youtube.com/watch?v=H1ToFXHW5pg",
+    "thumbnails": "https://img.youtube.com/vi/H1ToFXHW5pg/hq1.jpg",
+    "genre": "Jazz",
+    "happiness scale (1 = chill, 5 = party town)": 4,
+    "Video Views": 291871
+  }
+            ]
+  
+        </script>
+		
+        <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+        <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.142.0/build/three.module.js"
+            }
+        }
+        </script>
+
+		<script type="module">
+            import * as THREE from 'three';
+            import { OrbitControls } from 'https://unpkg.com/three@0.142.0/examples/jsm/controls/OrbitControls.js';
+            import { CSS3DRenderer, CSS3DObject } from 'https://unpkg.com/three@0.142.0/examples/jsm/renderers/CSS3DRenderer.js';
+            import { OBJLoader } from 'https://unpkg.com/three@0.142.0/examples/jsm/loaders/OBJLoader.js';
+            import { MTLLoader } from 'https://unpkg.com/three@0.142.0/examples/jsm/loaders/MTLLoader.js';
+
+            let camera, controls, webGLscene, webGLrenderer, raycaster;
+            const pointer = new THREE.Vector2();
+            let buildingArray = [];
+			      let INTERSECTED;
+
+            // static html 
+            let dateDiv = document.createElement('div');
+            dateDiv.innerText = 'Tiny Desk';
+            dateDiv.classList.add('text');
+            dateDiv.classList.add('datetext');
+            document.body.appendChild(dateDiv);
+            // performer's name
+            let nameDiv = document.createElement('div');
+            nameDiv.innerText = 'Scroll to move, hover over buildings to learn more, and click on them to watch your favorite Tiny Desks!';
+            nameDiv.classList.add('text');
+            nameDiv.classList.add('nametext');
+            document.body.appendChild(nameDiv);
+
+            // generating the video object with an iframe
+            function VidElement( id, x, y, z, ry ) {
+                const div = document.createElement( 'div' );
+                div.classList.add('video');
+                div.style.width = '480px';
+                div.style.height = '360px';
+                div.style.backgroundColor = '#000';
+
+                const iframe = document.createElement( 'iframe' );
+                iframe.style.width = '480px';
+                iframe.style.height = '360px';
+                iframe.style.border = '0px';
+                iframe.src = [ 'https://www.youtube.com/embed/', id, '?autoplay=1' ].join( '' );
+                iframe.allow = ['autoplay'];
+                div.appendChild( iframe );
+
+                return div;
+            }
+
+             // adding the video
+            let videoPlaceholder = new VidElement( '', 0, 50, 300, 0 );
+            document.body.appendChild(videoPlaceholder);
+
+            class BuildingObject {
+                constructor(cube, url, plane, artist){
+                    this.geom = cube;
+                    this.url = url;
+                    this.photo = plane;
+                    this.artist = artist;
+                }
+            }
+
+            init();
+            animate();
+
+            function init() {
+                webGLscene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 1, 1000 );
+
+                // plane center that determines all other positions
+                let originPoint = 1400;
+
+                let cameraYPos = originPoint + 1000;
+                camera.position.set( 0, 10, cameraYPos );
+
+                // LIGHT
+                var light = new THREE.PointLight(0xffffff);
+                light.position.set(0,0,cameraYPos);
+                webGLscene.add(light);
+
+                // RAYCASTER
+                raycaster = new THREE.Raycaster();
+
+                webGLrenderer = new THREE.WebGLRenderer();
+                webGLrenderer.setSize( window.innerWidth, window.innerHeight );
+                webGLrenderer.setClearColor(0x000000, 0.0);
+                document.body.appendChild( webGLrenderer.domElement );
+
+                // Controls for moving 
+                controls = new OrbitControls( camera, webGLrenderer.domElement );
+                controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+				        controls.dampingFactor = 0.05;
+				        controls.screenSpacePanning = true;
+				        controls.maxDistance = cameraYPos + 200;
+                controls.minDistance = 100;
+                controls.zoomSpeed = .2;
+                controls.enablePan = true;
+                
+                // Creating the plane
+                let moodColors = [0xee7752, 0xe73c7e, 0x23a6d5, 0x23d5ab, 0xffffa7];
+                let i = 0;
+                for(const color of moodColors) {
+                  let planedepth = (originPoint + 300) * 3;
+                  const geometry = new THREE.PlaneGeometry( 30, planedepth );
+                  const material = new THREE.MeshBasicMaterial( {color: color} );
+                  
+                  const plane = new THREE.Mesh( geometry, material );
+                  plane.rotation.x = -1.57;
+                  plane.position.x = customMap(i, 0, 5, -60, 90)
+                  plane.position.z = originPoint;
+                  plane.position.y = -10;
+                  webGLscene.add( plane );
+                  i++;
+                }
+
+                // bringing in the Tiny Desk data
+                const concertData = window.tinyDeskData;
+
+                const genreColorMapping = {
+                    "Stage&Screen":         "64809C",
+                    "Classical":            "3D348B",
+                    "Jazz":                 "7678ED",
+                    "R&B/Soul":             "AFA7F3",
+                    "Religious":            "61A7F1",
+                    "Blues":                "0F72DB",
+                    "Bluegrass/Americana":  "083D77",
+                    "World":                "388517",
+                    "Latin":                "64BD3D",
+                    "Reggae":               "F18701",
+                    "Folk":                 "FEB24D",
+                    "Country":              "F4D35E",
+                    "Rock":                 "F7DF8A",
+                    "Pop":                  "E47591",
+                    "Electronic/Dance":     "DA4167",
+                    "Hip-Hop":              "CC214C",
+                    "Rap":                  "AD022C",
+                };
+                
+                // BUILDING GENERATOR LOOP
+                for(const concert of concertData){
+                    let noOfViews = Number(concert['Video Views']);
+                    let boxHeight = customMap(noOfViews, 20000, 30000000, 10, 300)
+                    let boxWidth, boxDepth;
+                    if(boxHeight < 15) {
+                        boxWidth = getRndInteger(12, 14);
+                        boxDepth = getRndInteger(12, 14);
+                    } else {
+                        boxWidth = getRndInteger(8, 12);
+                        boxDepth = getRndInteger(6, 8);
+                    }
+                    const buildingGeometry = new THREE.BoxGeometry( boxWidth, boxHeight, boxDepth );
+
+                    // Color boxes based on genre
+                    let color;
+                    const allGenres = Object.keys(genreColorMapping);
+                    for (const genre of allGenres) {
+                        const genreRegExp = new RegExp(genre);
+                        if (genreRegExp.test(concert['genre'])) {
+                            color = parseInt(genreColorMapping[genre], 16);
+                        }
+                    }
+
+                    // If records didn't match any genres
+                    if (!color) {
+                        color = Math.floor(Math.random() * ((Object.keys(genreColorMapping)).length));
+                    }
+
+                    const buildingMaterial = new THREE.MeshStandardMaterial( {color: color} );
+                    buildingMaterial.transparent = true;
+                    buildingMaterial.opacity = .6;
+
+                    const cube = new THREE.Mesh( buildingGeometry, buildingMaterial );
+
+                    // Determine the x-position based on the happiness scale
+                    let happiness = parseInt(concert['happiness scale (1 = chill, 5 = party town)']);
+                    let xPosition = customMap(happiness, 1, 5, -60, 60);
+
+                    // Determine the z-position based on date 
+                    const date = Date.parse(concert['public_publish_date']);
+                    let buildingOriginPointZ = cameraYPos - 70;
+                    let zPosition = customMap(date, 1208836800000, 1414728000000, buildingOriginPointZ, 200);
+
+                    // Setting up a final position of a cube 
+                    cube.position.set(xPosition, boxHeight / 2 - 10, zPosition);
+
+                    webGLscene.add ( cube );
+
+                    // Adding building objects to the array with video URLs
+                    let urltoSlice = concert['thumbnails'];
+
+                    // Adding tiny desk images 
+                    var picTexture = new THREE.TextureLoader().load( urltoSlice );
+                    let picPlaneMaterial = new THREE.MeshLambertMaterial({map: picTexture});
+                    let picPlaneGeom = new THREE.PlaneGeometry(8, 6);
+                    let planeMesh = new THREE.Mesh(picPlaneGeom, picPlaneMaterial);
+                    planeMesh.position.set(xPosition, boxHeight / 2 - 10, zPosition);
+
+                    webGLscene.add(planeMesh);
+
+                    let finalUrl = urltoSlice.slice(27).slice(0, -8);
+                    let tempObj = new BuildingObject(cube, finalUrl, planeMesh, concert['artist']);
+                    buildingArray.push( tempObj );
+
+                    // Changing the date on our 'timeline'
+                    controls.addEventListener( 'change', event => {  
+                        let posOnTheCanvas = controls.object.position.z;
+                        if(posOnTheCanvas < buildingOriginPointZ) {
+                            let positionYear = customMap(posOnTheCanvas, buildingOriginPointZ, 200, 1208836800000, 1414728000000)
+                            let timelineDate = new Date(positionYear);
+                            let displayYear = timelineDate.getFullYear();
+                            dateDiv.innerText = displayYear;
+                        } else {
+                            dateDiv.innerText = 'Tiny Desk';
+                        }
+                    })
+                }
+
+                document.addEventListener( 'mousemove', onPointerMove );
+                window.addEventListener( 'resize', onWindowResize );
+
+                const mtlLoader = new MTLLoader()
+                mtlLoader.load(
+                    'models/mic.mtl',
+                    (materials) => {
+                        materials.preload()
+
+                        const objLoader = new OBJLoader()
+                        objLoader.setMaterials(materials)
+                        objLoader.load(
+                            'models/mic.obj',
+                            (object) => {
+                                object.position.x = -3;
+                                object.position.y = 0;
+                                object.position.z = cameraYPos - 40;
+                                object.rotation.y = -.75;
+                                webGLscene.add(object)
+
+                            },
+                            (xhr) => {
+                                console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                            },
+                            (error) => {
+                                console.log('An error happened')
+                            }
+                        )
+                    },
+                    (xhr) => {
+                        console.log((xhr.loaded / xhr.total) * 100 + '% loaded')
+                    },
+                    (error) => {
+                        console.log('An error happened')
+                    }
+
+                    
+                )
+
+            }
+
+            function animate() {
+                requestAnimationFrame( animate );
+                render();
+            }
+
+            function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+
+                webGLrenderer.setSize( window.innerWidth, window.innerHeight );
+            }
+
+            function onPointerMove( event ) {
+                // calculate pointer position in normalized device coordinates
+                // (-1 to +1) for both components
+                pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+            } 
+
+            var downwardAnimation = true;
+            
+            function render() {
+                // find intersections
+
+                document.addEventListener('mousemove', function(){
+				            raycaster.setFromCamera( pointer, camera );
+                });
+
+                let intersects = [];
+
+                for(const buildingObj of buildingArray) {
+                    let tempObj = buildingObj['geom'];
+
+                    // Photo animation
+                    let imageStart = buildingObj.geom.geometry.parameters.height / 2;
+                    let imageStop = buildingObj.geom.geometry.parameters.height;
+                    let imagePos = buildingObj.photo.position.y;
+
+                    if (imagePos > -5 && downwardAnimation) {
+                        buildingObj.photo.position.y -= .5;
+                    }
+
+                    if(downwardAnimation) nameDiv.innerText = 'Scroll to move, hover over buildings to learn more, and click on them to watch your favorite Tiny Desks!';
+
+                    let detect = raycaster.intersectObject( tempObj, false );
+                    if(detect.length != 0){
+                        // detect.object
+                        for(const obj of detect) {
+                            obj.url = buildingObj['url'];
+                            obj.photo = buildingObj['photo'];
+                            obj.artist = buildingObj['artist'];
+                            intersects.push(obj);
+                        }
+                    }
+                    
+                }
+
+
+                if ( intersects.length > 0 ) {
+                    downwardAnimation = false;
+                    document.body.style.cursor = 'pointer';
+
+                    // IMAGE MOVE
+                    let currImagePos = intersects[0].object.geometry.parameters.height / 2;
+                    let imageDist = intersects[0].object.geometry.parameters.height;
+
+                    if ( INTERSECTED != intersects[ 0 ].object ) {
+                        if ( INTERSECTED ) {
+                            INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                        }
+                        intersects[0].photo.position.y = imageDist;
+                        nameDiv.innerText = intersects[0].artist;
+
+                        INTERSECTED = intersects[ 0 ].object;
+                        INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+                        INTERSECTED.material.emissive.setHex( 0xff0000 );
+
+                        document.body.addEventListener('click', function(){
+                            // VIDEO CHANGE
+                            videoPlaceholder.remove();
+                            videoPlaceholder = new VidElement( intersects[0].url, 0, 50, 300, 0 );
+                            document.body.appendChild(videoPlaceholder);
+                        })
+
+                    }
+                } else {
+                    downwardAnimation = true;
+                    document.body.style.cursor = 'auto';
+                    if ( INTERSECTED ) {
+                        INTERSECTED.material.emissive.setHex( INTERSECTED.currentHex );
+                    }
+                    INTERSECTED = null;
+                }
+
+                webGLrenderer.render( webGLscene, camera );
+            }
+
+            function getRndInteger(min, max) {
+                return Math.floor(Math.random() * (max - min + 1) ) + min;
+            }
+
+            function customMap(n, start1, stop1, start2, stop2) {
+                return ((n-start1)/(stop1-start1))*(stop2-start2)+start2;
+            };
+            
+            function vidToFront(video){
+                let z = video.style.zIndex;
+                z == -1 ? z = 1 : z = -1;
+                video.style.zIndex = z;
+            }
+
+            document.body.addEventListener('keydown', function(){
+                vidToFront(videoPlaceholder);
+            });
+
+		</script>
+	</body>
+</html>
